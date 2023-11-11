@@ -14,6 +14,7 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
 
     Route::apiResource('questionaires',QuestionaireContoller::class)->only(['index']);
     Route::get('/questionaires/latest',[QuestionaireContoller::class,'latestQuestionaire']);
+    Route::post('/questionaires/for-evaluatees',[QuestionaireContoller::class,'forEvaluatees']);
 
 
     Route::apiResource('evaluatees',EvaluateeController::class);

@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Evaluatee;
+use App\Models\Department;
 use App\Models\Questionaire;
 use Illuminate\Database\Seeder;
 
@@ -15,12 +15,12 @@ class PivotSeeder extends Seeder
     {
 
         $questionaires = Questionaire::all();
-        $evaluatees = Evaluatee::all();
+        $departments = Department::all();
 
 
         foreach($questionaires as $questionaire){
-            foreach($evaluatees as $evaluatee){
-                $evaluatee->questionaires()->attach($questionaire->id);
+            foreach($departments as $department){
+                $department->questionaires()->attach($questionaire->id);
             }
         }
     }

@@ -32,11 +32,6 @@ class Evaluatee extends Model
         return $this->morphToMany(Department::class,'departmentable')->withTimestamps();
     }
 
-    public function questionaires():BelongsToMany
-    {
-        return $this->belongsToMany(Questionaire::class,'evaluatees_questionaires')->withTimestamps();
-    }
-
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class,'evaluatees_users','evaluatee_id','user_id')

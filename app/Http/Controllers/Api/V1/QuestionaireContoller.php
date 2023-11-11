@@ -8,6 +8,17 @@ use Illuminate\Http\Request;
 
 class QuestionaireContoller extends Controller
 {
+    public function forEvaluatees(Request $request)
+    {
+        $questionaires = Questionaire::with([
+                        "evaluatees" => function($query) use ($request){
+                            // $query->wherIn('id', $request->evaluatee_list);
+                        },
+                        ])->get();
+
+        return response()->json($questionaires);
+        // return response()->json(['test'=>$request->evaluatees_list]);
+    }
 
     public function latestQuestionaire()
     {

@@ -16,6 +16,7 @@ use App\Models\Questionaire;
 use Illuminate\Http\Request;
 use PhpParser\Node\Expr\Eval_;
 use App\Http\Resources\UserResource;
+use App\Models\Department;
 use Illuminate\Database\Eloquent\Builder;
 
 class TestController extends Controller
@@ -180,13 +181,13 @@ class TestController extends Controller
         //                     }
         //                     ])
         //                     ->find(1);
-        $klasses = Klass::with('evaluatee')
-                        ->with(['sectionYears' => function($q){
-                            $q->with('users');
-                        }])
-                        ->get();
-            // dd($klasses[0]->evaluatee);
-            dd( $klasses[0]->sectionYears[0]->users[0]);
+        // $klasses = Klass::with('evaluatee')
+        //                 ->with(['sectionYears' => function($q){
+        //                     $q->with('users');
+        //                 }])
+        //                 ->get();
+        //     // dd($klasses[0]->evaluatee);
+        //     dd( $klasses[0]->sectionYears[0]->users[0]);
             // foreach($users->sectionYears as $sy){
             //     dd($sy->klasses[0]->evaluatee );
             //     // dd($sy->klasses[0]->evaluatee->id );
@@ -209,5 +210,10 @@ class TestController extends Controller
 
     //    return response()->json($t);
     //    return new UserResource($test);
+
+                $test = Department::with('evaluatees')->get();
+
+                return response()->json( $test);
+
     }
 }

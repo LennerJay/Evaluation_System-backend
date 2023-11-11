@@ -28,9 +28,9 @@ class Questionaire extends Model
         return $this->belongsToMany(Criteria::class,'criteria_questionaire')->withTimestamps();
     }
 
-    public function evaluatees(): BelongsToMany
+    public function departments(): BelongsToMany
     {
-        return $this->belongsToMany(Evaluatee::class,'evaluatees_questionaires')->withTimestamps();
+        return $this->belongsToMany(Questionaire::class,'departments_questionaires')->withTimestamps();
     }
 
     public function scopeQuestionaireWithCriteria(Builder $query, $id= null)
