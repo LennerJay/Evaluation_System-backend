@@ -23,6 +23,9 @@ class Questionaire extends Model
         'max_respondents',
     ];
 
+    protected $hidden =['pivot'];
+
+
     public function criterias(): BelongsToMany
     {
         return $this->belongsToMany(Criteria::class,'criteria_questionaire')->withTimestamps();

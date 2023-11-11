@@ -3,21 +3,40 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\DepartmentResource;
+use App\Models\Department;
 use App\Models\Questionaire;
 use Illuminate\Http\Request;
 
 class QuestionaireContoller extends Controller
 {
-    public function forEvaluatees(Request $request)
+    public function forEvaluatee(Request $request)
     {
-        $questionaires = Questionaire::with([
-                        "evaluatees" => function($query) use ($request){
-                            // $query->wherIn('id', $request->evaluatee_list);
-                        },
-                        ])->get();
+        $questionaire = cache()->remember(
+            'questionaire',
+            now()->addDay(),
+            function() use ($request){
+                return Department::with([
+                    'questionaires' =>function($q){
+                        $q->with([
+                            'criterias' => function($query){
+                                $query->with([
+                                            'questions' =>function($q){
+                                                    $q->select(['id','question','criteria_id']);
+                                            }
+                                        ])
+                                    ->select(['id','description']);
+                            }
+                        ]);
+                    }
+                ])
+                ->find($request->departmend_id);
+            }
+        );
 
-        return response()->json($questionaires);
-        // return response()->json(['test'=>$request->evaluatees_list]);
+
+        return new DepartmentResource($questionaire);
+
     }
 
     public function latestQuestionaire()
