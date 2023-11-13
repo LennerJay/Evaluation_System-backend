@@ -17,8 +17,10 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
     Route::post('/questionaires/for-evaluatee',[QuestionaireContoller::class,'forEvaluatee']);
 
 
-    Route::apiResource('evaluatees',EvaluateeController::class);
+    Route::apiResource('evaluatees',EvaluateeController::class)->only(['index']);
     Route::post('evaluatees/evaluated',[EvaluateeController::class,'evaluated']);
+    Route::post('evaluatees/evaluatee-info',[EvaluateeController::class,'evaluateeInfo']);
+    Route::post('evaluatees/{user}/evaluatees-to-rate',[EvaluateeController::class,'getEvaluateesToRate']);
 
 
     Route::post('/rating',[RatingContoller::class,'store'])->withoutMiddleware('auth:sanctum');
@@ -30,8 +32,6 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
     Route::apiResource('users',UserController::class)->only(['index']);
     // Route::get('users/user-info',[UserController::class,'getUserInfo']);
     Route::get('users/user',[UserController::class,'getUser']);
-    Route::post('users/{user}/evaluatees-to-rate',[UserController::class,'getEvaluateesToRate']);
-    // Route::post('users/evaluatees-to-rate',[UserController::class,'getEvaluateesToRate']);
 
 });
 

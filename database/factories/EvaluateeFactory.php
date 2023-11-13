@@ -17,7 +17,8 @@ class EvaluateeFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->title().' '.fake()->firstName() . ' ' . fake()->lastName()
+            'name' => fake()->title().' '.fake()->firstName() . ' ' . fake()->lastName(),
+            'job_type' => fake()->randomElement([0,1])
         ];
     }
 }

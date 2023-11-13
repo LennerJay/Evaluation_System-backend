@@ -16,9 +16,27 @@ class EvaluateeController extends Controller
 
     public function index()
     {
-        $evaluatees = Evaluatee::with(['departments','roles'])->get();
+        $evaluatees = Evaluatee::with(['departments'])->get();
         return  EvaluateeResource::collection($evaluatees);
 
+    }
+
+    public function evaluateeInfo(Request $request)
+    {
+
+        $evaluatee = Evaluatee::with([
+                                    'klasses' => function($query){
+                                        $query->with('subject')
+                                            ->with(['sectionYears'=>function($q){
+                                                    $q->with('users');
+                                            }])
+                                            //  ->where('subject_id',5)
+                                            ->get();
+                                    },
+                                    'departments'
+                                    ])
+                                    ->find($request->evaluatee_id);
+        return response()->json( $evaluatee);
     }
 
     public function evaluated(Request $request)
@@ -30,29 +48,21 @@ class EvaluateeController extends Controller
 
     }
 
-
+    public function getEvaluateesToRate(User $user){
+        $evaluatees = $user->evaluatees()->with(['roles','departments'])->get();
+        // return response()->json( $evaluatees);
+        return EvaluateeResource::collection($evaluatees);
+    }
     public function create()
     {
         //
     }
 
-
-    public function store(Request $request)
+    public function show(Request $request)
     {
         //
     }
 
-
-    public function show(string $id)
-    {
-        //
-    }
-
-
-    public function edit(string $id)
-    {
-        //
-    }
 
 
     public function update(Request $request, string $id)

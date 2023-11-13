@@ -13,7 +13,7 @@ class QuestionaireContoller extends Controller
     public function forEvaluatee(Request $request)
     {
         $questionaire = cache()->remember(
-            'questionaire',
+            'questionaire' . $request->departmend_id,
             now()->addDay(),
             function() use ($request){
                 return Department::with([

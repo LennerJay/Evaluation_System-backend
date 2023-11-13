@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('evaluatees', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->boolean('job_type');
             $table->timestamps();
         });
     }
