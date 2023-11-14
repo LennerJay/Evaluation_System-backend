@@ -27,13 +27,16 @@ class Klass extends Model
         return $this->belongsTo(Evaluatee::class);
     }
 
-    public function klassSection():HasMany
+    public function klassSections():HasMany
     {
         return $this->hasMany(KlassSection::class);
     }
 
     public function sectionYears():BelongsToMany
     {
-        return $this->belongsToMany(SectionYear::class,'klass_sections','klass_id','section_year_id')->withTimestamps();
+        return $this->belongsToMany(SectionYear::class,'klass_sections','klass_id','section_year_id')
+        ->withPivot(['time','day'])
+        ->withTimestamps();
     }
+
 }

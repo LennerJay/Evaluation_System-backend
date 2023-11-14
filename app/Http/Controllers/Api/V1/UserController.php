@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\EvaluateeResource;
 use App\Http\Resources\UserResource;
+use App\Models\Klass;
+use App\Models\KlassSection;
+use App\Models\SectionYear;
 
 class UserController extends Controller
 {
@@ -17,46 +20,56 @@ class UserController extends Controller
         return  UserResource::collection($users);
     }
 
-    // public function getUserInfo()
-    // {
-    //     $user = cache()->remember(
-    //         'getUser',
-    //         now()->addDay(),
-    //         function(){
-    //             return User::with('roles')
-    //             ->findOrFail(auth()->user()->id_number);
-    //         }
-    //     );
+    public function getUserInfo()
+    {
+        // $user = cache()->remember(
+        //     'getUserInfo' . auth()->user()->id_number,
+        //     now()->addDay(),
+        //     function(){
+        //     return User::with([
+        //             'departments',
+        //             'roles',
+        //             'userInfo',
+        //             'sectionYears'
+        //             => function($query)
+        //             {
+        //                 $query->with('klassSections');
+        //                 // $query->with([
+        //                 //     'klassSections'
+        //                 //     => function($q)
+        //                 //     {
+        //                 //         $q->with(['subject','evaluatee']);
+        //                 //     }
+        //                 // ]);
+        //             }
+        //         ])
+        //         ->findOrFail(auth()->user()->id_number);
+        //     }
+        // );
 
+            // $user = KlassSection::with('sectionYear')->get();
+            $user = KlassSection::with([
+                'sectionYear'
+            ])
+            ->get();
 
-    //     return new UserResource($user);
+        // return new UserResource($user);
+        return response()->json($user);
 
-    // }
+    }
 
     public function getUser()
     {
 
         $user = cache()->remember(
-            'getUserInfo' . auth()->user()->id_number,
+            'getUser',
             now()->addDay(),
             function(){
-             return User::with([
-                    'departments',
-                    'roles',
-                    'userInfo',
-                    'sectionYears'
-                        => function($query){
-                        $query->with([
-                            'klasses'
-                            => function($q){
-                                $q->with(['subject','evaluatee']);
-                            }
-                        ]);
-                    }
-                ])
+                return User::with('roles')
                 ->findOrFail(auth()->user()->id_number);
             }
-    );
+        );
+        // return response()->json($user);
         return new UserResource($user);
     }
 

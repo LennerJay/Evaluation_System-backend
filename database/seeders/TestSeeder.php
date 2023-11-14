@@ -7,6 +7,7 @@ use App\Models\Klass;
 use App\Models\Subject;
 use App\Models\UserInfo;
 use App\Models\Evaluatee;
+use App\Models\KlassSection;
 use App\Models\SectionYear;
 use Illuminate\Database\Seeder;
 
@@ -50,7 +51,11 @@ class TestSeeder extends Seeder
         foreach ($klasses as $klass) {
             $randomeSections  = SectionYear::inRandomOrder()->limit(3)->get();
             foreach ($randomeSections as $randomSection) {
-                $klass->sectionYears()->attach($randomSection->id);
+                // $klass->sectionYears()->attach($randomSection->id);
+                KlassSection::factory()->create([
+                    'klass_id' => $klass->id,
+                    'section_year_id' => $randomSection->id,
+                ]);
                 $users = User::factory(10)->create();
                 foreach ($users as $user) {
                     $randomSection->users()->attach($user->id_number);

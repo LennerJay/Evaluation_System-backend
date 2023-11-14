@@ -30,7 +30,7 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
     Route::apiResource('roles',RoleController::class)->only(['index'])->withoutMiddleware('auth:sanctum');
 
     Route::apiResource('users',UserController::class)->only(['index']);
-    // Route::get('users/user-info',[UserController::class,'getUserInfo']);
+    Route::get('users/user-info',[UserController::class,'getUserInfo']);
     Route::get('users/user',[UserController::class,'getUser']);
 
 });

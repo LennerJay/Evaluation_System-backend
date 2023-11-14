@@ -4,7 +4,9 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Klass;
+use App\Models\KlassSection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -13,7 +15,7 @@ class SectionYear extends Model
     use HasFactory;
 
     protected $fillable = ['s_y'];
-    protected $hidden = ['pivot'];
+    // protected $hidden = ['pivot'];
 
     public function users():BelongsToMany
     {
@@ -22,6 +24,13 @@ class SectionYear extends Model
 
     public function klasses(): BelongsToMany
     {
-        return $this->belongsToMany(Klass::class,'klass_sections','section_year_id','klass_id')->withTimestamps();
+        return $this->belongsToMany(Klass::class,'klass_sections','section_year_id','klass_id')
+        ->withPivot(['time','day'])
+        ->withTimestamps();
+    }
+
+    public function klassSections(): HasMany
+    {
+        return $this->hasMany(KlassSection::class,'section_year_id','id')->withTimestamps();
     }
 }

@@ -2,17 +2,23 @@
 
 namespace App\Models;
 
-use App\Models\Schedule;
+use App\Models\Klass;
+use App\Models\SectionYear;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class KlassSection extends Model
 {
     use HasFactory;
 
-    public function schedule():HasOne
+    public function sectionYear():BelongsTo
     {
-        return $this->hasOne(Schedule::class);
+        return $this->belongsTo(SectionYear::class);
+    }
+
+    public function klass():BelongsTo
+    {
+        return $this->belongsTo(Klass::class);
     }
 }
