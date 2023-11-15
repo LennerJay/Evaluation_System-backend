@@ -19,7 +19,7 @@ class UserResource extends JsonResource
             'departments' => DepartmentResource::collection($this->whenLoaded('departments')),
             'roles' => RoleResource::collection($this->whenLoaded('roles')),
             'infos' => UserInfoResource::make($this->whenLoaded('userInfo')),
-            'year_sections' => SectionYearResource::collection($this->whenLoaded('sectionYears')),
+            'year_sections' => SectionYearResource::collection($this->whenLoaded('sectionYearsPerUser')),
         ];
     }
 

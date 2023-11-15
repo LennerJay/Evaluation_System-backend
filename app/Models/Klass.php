@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Klass extends Model
 {
     use HasFactory;
-    protected $hidden = ['pivot'];
+    // protected $hidden = ['pivot'];
 
     public function subject():BelongsTo
     {

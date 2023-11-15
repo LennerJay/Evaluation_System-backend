@@ -15,11 +15,17 @@ class KlassesResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            // 'subject' => SubjectResource::make($this->whenLoaded('sbuject')),
+            "id"=> $this->id,
             'subject' => SubjectResource::make($this->whenLoaded('subject')),
             'evaluatee' =>EvaluateeResource::make($this->whenLoaded('evaluatee')),
             'subject_id' => $this->subject_id,
             'evaluatee_id' => $this->evaluatee_id,
+            'schedule' => $this->whenLoaded('pivot',function(){
+                return [
+                    'time' => $this->pivot->time,
+                    'day' => $this->pivot->day,
+                ];
+            }),
         ];
     }
 }

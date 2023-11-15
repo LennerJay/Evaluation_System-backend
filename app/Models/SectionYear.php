@@ -17,7 +17,7 @@ class SectionYear extends Model
     protected $fillable = ['s_y'];
     // protected $hidden = ['pivot'];
 
-    public function users():BelongsToMany
+    public function sectionYearsPerUser():BelongsToMany
     {
         return $this->belongsToMany(User::class,'section_per_users','section_year_id','user_id')->withTimestamps();
     }
@@ -25,12 +25,14 @@ class SectionYear extends Model
     public function klasses(): BelongsToMany
     {
         return $this->belongsToMany(Klass::class,'klass_sections','section_year_id','klass_id')
-        ->withPivot(['time','day'])
-        ->withTimestamps();
+        ->withPivot(['time','day']);
+        // ->withTimestamps();
     }
 
     public function klassSections(): HasMany
     {
         return $this->hasMany(KlassSection::class,'section_year_id','id')->withTimestamps();
     }
+
+
 }

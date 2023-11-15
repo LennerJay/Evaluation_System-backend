@@ -91,7 +91,7 @@ class User extends Authenticatable
         return $this->morphToMany(Role::class,'roleable')->withTimestamps();
     }
 
-    public function sectionYears():BelongsToMany
+    public function sectionYearsPerUser():BelongsToMany
     {
         return $this->belongsToMany(SectionYear::class,'section_per_users','user_id','section_year_id')->withTimestamps();
     }

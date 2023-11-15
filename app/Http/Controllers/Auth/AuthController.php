@@ -16,6 +16,7 @@ class AuthController extends Controller
                 'id_number' => ['The credentials you entered are incorrect.']
             ]);
         }
+
     }
 
     public function logout(Request $request)
