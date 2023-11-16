@@ -26,7 +26,6 @@ class SectionYear extends Model
     {
         return $this->belongsToMany(Klass::class,'klass_sections','section_year_id','klass_id')
         ->withPivot(['time','day']);
-        // ->withTimestamps();
     }
 
     public function klassSections(): HasMany

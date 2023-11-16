@@ -28,15 +28,16 @@ class EvaluateeController extends Controller
                                     'klasses' => function($query){
                                         $query->with('subject')
                                             ->with(['sectionYears'=>function($q){
-                                                    $q->with('users');
+                                                    // $q->withCount('sectionYearsPerUser');
                                             }])
-                                            //  ->where('subject_id',5)
                                             ->get();
                                     },
                                     'departments'
                                     ])
-                                    ->find($request->evaluatee_id);
-        return response()->json( $evaluatee);
+                                    ->findOrFail($request->evaluatee_id);
+
+
+        return response()->json($evaluatee);
     }
 
     public function evaluated(Request $request)
@@ -49,6 +50,8 @@ class EvaluateeController extends Controller
     }
 
     public function getEvaluateesToRate(User $user){
+
+
         $evaluatees = $user->evaluatees()->with(['roles','departments'])->get();
         // return response()->json( $evaluatees);
         return EvaluateeResource::collection($evaluatees);

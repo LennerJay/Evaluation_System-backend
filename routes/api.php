@@ -17,7 +17,7 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
     Route::post('/questionaires/for-evaluatee',[QuestionaireContoller::class,'forEvaluatee']);
 
 
-    Route::apiResource('evaluatees',EvaluateeController::class)->only(['index']);
+    Route::apiResource('evaluatees',EvaluateeController::class)->only(['index'])->withoutMiddleware('auth:sanctum');;
     Route::post('evaluatees/evaluated',[EvaluateeController::class,'evaluated']);
     Route::post('evaluatees/evaluatee-info',[EvaluateeController::class,'evaluateeInfo']);
     Route::post('evaluatees/{user}/evaluatees-to-rate',[EvaluateeController::class,'getEvaluateesToRate']);
