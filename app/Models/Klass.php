@@ -35,7 +35,6 @@ class Klass extends Model
     public function sectionYears():BelongsToMany
     {
         return $this->belongsToMany(SectionYear::class,'klass_sections','klass_id','section_year_id')
-        ->withPivot(['time','day'])
         ->withTimestamps();
     }
 

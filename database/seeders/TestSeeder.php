@@ -58,29 +58,29 @@ class TestSeeder extends Seeder
                 ]);
                 $users = User::factory(10)->create();
                 foreach ($users as $user) {
-                    $randomSection->users()->attach($user->id_number);
+                    $randomSection->sectionYearsPerUser()->attach($user->id_number);
                     UserInfo::factory()->create(['user_id' => $user->id_number]);
                 }
             }
 
         }
 
-        $klasses = Klass::with('evaluatee')
-        ->with(['sectionYears' => function($q){
-            $q->with('users');
-        }])
-        ->get();
+        $klasses = Klass::with([
+                        'sectionYears' => function($q){
+                            $q->with('sectionYearsPerUser');
+                        },
+                        'evaluatee'
+        ])->get();
 
-            foreach ($klasses as $klass) {
+            // foreach ($klasses as $klass) {
 
-                foreach( $klass->sectionYears as $sy){
-                    foreach($sy->users as $user){
+            //     foreach( $klass->section_years as $sy){
+            //         foreach($sy->section_years_per_user as $user){
+            //             $user->evaluatees()->syncWithoutDetaching($klass->evaluatee_id);
+            //         }
 
-                        $user->evaluatees()->syncWithoutDetaching($klass->evaluatee->id);
-                    }
-
-                }
-            }
+            //     }
+            // }
 
 
     }
