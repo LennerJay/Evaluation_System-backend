@@ -212,15 +212,17 @@ class TestController extends Controller
     //    return new UserResource($test);
 
                 // $test = Department::with('evaluatees')->get();
-                $test = Klass::with([
-                    'sectionYears' => function($q){
-                        $q->with('sectionYearsPerUser');
-                    },
-                    'evaluatee'
-    ])->get();
+                    $klasses = Klass::with([
+                        'evaluatee',
+                        'sectionYears' => function($q){
+                            $q->with('sectionYearsPerUser');
+                        }
+                    ])->get();
 
 
-                return response()->json( $test);
+
+                // return view('index',compact('klasses'));
+                return response()->json($klasses);
 
     }
 }

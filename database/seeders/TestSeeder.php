@@ -66,21 +66,21 @@ class TestSeeder extends Seeder
         }
 
         $klasses = Klass::with([
+                        'evaluatee',
                         'sectionYears' => function($q){
                             $q->with('sectionYearsPerUser');
-                        },
-                        'evaluatee'
-        ])->get();
+                        }
+                    ])->get();
 
-            // foreach ($klasses as $klass) {
+            foreach ($klasses as $klass) {
 
-            //     foreach( $klass->section_years as $sy){
-            //         foreach($sy->section_years_per_user as $user){
-            //             $user->evaluatees()->syncWithoutDetaching($klass->evaluatee_id);
-            //         }
+                foreach( $klass->sectionYears as $sy){
+                    foreach($sy->sectionYearsPerUser as $user){
+                        $user->evaluatees()->syncWithoutDetaching($klass->evaluatee_id);
+                    }
+                }
+            }
 
-            //     }
-            // }
 
 
     }

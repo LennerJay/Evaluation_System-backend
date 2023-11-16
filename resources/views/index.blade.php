@@ -8,7 +8,14 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="container mx-auto mt-10 mb-10 max-w-3xl">
-    <div class="overflow-auto rounded-lg shadow hidden md:block">
+
+   @foreach ($klasses as $klass )
+        {{-- @foreach ($klass->sectionYears as $sy)
+            <h1>{{$sy->s_y}}</h1>
+        @endforeach --}}
+        @dd($klass->sectionYears)
+   @endforeach
+    {{-- <div class="overflow-auto rounded-lg shadow hidden md:block">
         <table class="w-full">
           <thead class="bg-gray-50 border-b-2 border-gray-200">
           <tr>
@@ -38,7 +45,7 @@
           </tr>
           </tbody>
         </table>
-      </div>
+      </div> --}}
 
 </body>
 </html>
