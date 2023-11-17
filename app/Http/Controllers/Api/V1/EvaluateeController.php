@@ -28,7 +28,7 @@ class EvaluateeController extends Controller
                                     'klasses' => function($query){
                                         $query->with('subject')
                                             ->with(['sectionYears'=>function($q){
-                                                    // $q->withCount('sectionYearsPerUser');
+                                                    $q->withCount('sectionYearsPerUser');
                                             }])
                                             ->get();
                                     },
@@ -74,8 +74,9 @@ class EvaluateeController extends Controller
     }
 
 
-    public function destroy(string $id)
+    public function destroy(Evaluatee $evaluatee)
     {
-        //
+        $evaluatee->delete();
+        return response()->json(["message"=> "Delete Successfully"],200);
     }
 }
