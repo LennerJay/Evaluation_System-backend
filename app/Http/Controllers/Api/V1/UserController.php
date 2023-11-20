@@ -16,7 +16,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::with(['roles','userInfo','departments'])->get();
+        $users = User::with(['roles','userInfo','departments','sectionYearsPerUser'])->get();
         return  UserResource::collection($users);
     }
 

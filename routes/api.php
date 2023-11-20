@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\v1\DashboardController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\v1\UserController;
 use App\Http\Controllers\Api\V1\RatingContoller;
@@ -32,6 +33,10 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
     Route::apiResource('users',UserController::class)->only(['index']);
     Route::get('users/user-info',[UserController::class,'getUserInfo']);
     Route::get('users/user',[UserController::class,'getUser']);
+
+
+    Route::get('/dashboard/admin',[DashboardController::class,'admin']);
+    Route::get('/dashboard/user',[DashboardController::class,'user']);
 
 });
 
