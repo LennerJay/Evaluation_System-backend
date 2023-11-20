@@ -16,7 +16,14 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::with(['roles','userInfo','departments','sectionYearsPerUser'])->get();
+        $users = cache()->remember(
+            'AllUsers',
+             3600,
+            function () {
+            return  User::with(['roles','userInfo','departments','sectionYearsPerUser'])->get();
+        });
+        // $users = User::with(['roles','userInfo','departments','sectionYearsPerUser'])->get();
+
         return  UserResource::collection($users);
     }
 

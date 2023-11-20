@@ -15,6 +15,7 @@ class DashboardController extends Controller
     {
         $totalUsers = User::count();
         $totalEvaluatees = Evaluatee::count();
+
         $collections = collect(['total_users' => $totalUsers, 'total_evaluatees' => $totalEvaluatees]);
         return response()->json($collections);
     }

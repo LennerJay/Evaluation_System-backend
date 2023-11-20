@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\RatingContoller;
 use App\Http\Controllers\Api\V1\EvaluateeController;
 use App\Http\Controllers\Api\v1\DepartmentController;
 use App\Http\Controllers\Api\V1\QuestionaireContoller;
+use App\Http\Controllers\Api\V1\SectionYearController;
 
 Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
 
@@ -34,6 +35,8 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
     Route::get('users/user-info',[UserController::class,'getUserInfo']);
     Route::get('users/user',[UserController::class,'getUser']);
 
+
+    Route::apiResource('section-year',SectionYearController::class)->only(['index']);
 
     Route::get('/dashboard/admin',[DashboardController::class,'admin']);
     Route::get('/dashboard/user',[DashboardController::class,'user']);

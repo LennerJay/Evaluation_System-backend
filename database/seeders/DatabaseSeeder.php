@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         ////<----this function is for no ratings
-        $this->call([TestSeeder::class,RoleSeeder::class,DepartmentSeeder::class]);
+        $this->call([TestSeeder::class,DepartmentSeeder::class,RoleSeeder::class]);
         ////-------->
 
         $departments = Department::all();
