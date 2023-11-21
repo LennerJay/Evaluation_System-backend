@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\DepartmentResource;
 use App\Models\Department;
 use App\Models\Questionaire;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\DepartmentResource;
+use App\Http\Resources\QuestionaireResource;
 
 class QuestionaireContoller extends Controller
 {
@@ -27,7 +28,9 @@ class QuestionaireContoller extends Controller
                                         ])
                                     ->select(['id','description']);
                             }
-                        ]);
+                        ])
+                        ->where('status', '1')
+                        ;
                     }
                 ])
                 ->find($request->departmend_id);
@@ -69,10 +72,10 @@ class QuestionaireContoller extends Controller
                                                       ->select(['id','description']);
                                             }
                                        ])
-                                       ->select(['id','title','description','semester','school_year','max_respondents'])
+                                       ->select(['id','title','description','semester','school_year','max_respondents','status'])
                                        ->get();
-        return response()->json($questionaires);
-        // return QuestionaireResource::make($questionaires);
+        // return response()->json($questionaires);
+        return QuestionaireResource::collection($questionaires);
     }
 
     /**

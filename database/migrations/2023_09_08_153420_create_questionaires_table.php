@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('semester');
             $table->string('school_year');
             $table->integer('max_respondents')->nullable();
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }

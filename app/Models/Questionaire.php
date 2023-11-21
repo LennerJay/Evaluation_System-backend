@@ -21,6 +21,7 @@ class Questionaire extends Model
         'semester',
         'school_year',
         'max_respondents',
+        'status'
     ];
 
     protected $hidden =['pivot'];

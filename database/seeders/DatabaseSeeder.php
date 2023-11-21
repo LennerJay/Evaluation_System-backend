@@ -28,8 +28,10 @@ class DatabaseSeeder extends Seeder
         $departments = Department::all();
 
         foreach ($departments as $department) {
-            $q = Questionaire::factory()->create(['description' => 'This questionaire is for ' . $department->department]);
-            $department->questionaires()->attach($q->id);
+            $questionaires = Questionaire::factory(2)->create(['description' => 'This questionaire is for ' . $department->department]);
+            foreach($questionaires as $questionaire) {
+                $department->questionaires()->attach($questionaire->id);
+            }
         }
 
 

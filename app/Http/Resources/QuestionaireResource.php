@@ -21,6 +21,7 @@ class QuestionaireResource extends JsonResource
             'semester' =>$this->semester,
             'school_year' =>$this->school_year,
             'max_respondents' =>$this->max_respondents,
+            'status' =>$this->status,
             'criterias' => CriteriaResource::collection($this->whenLoaded('criterias')),
 
         ];
