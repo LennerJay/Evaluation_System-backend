@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\v1\UserController;
 use App\Http\Controllers\Api\V1\RatingContoller;
 use App\Http\Controllers\Api\V1\EvaluateeController;
 use App\Http\Controllers\Api\v1\DepartmentController;
+use App\Http\Controllers\Api\v1\EntityController;
 use App\Http\Controllers\Api\V1\QuestionaireContoller;
 use App\Http\Controllers\Api\V1\SectionYearController;
 
@@ -24,6 +25,7 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
     Route::post('evaluatees/evaluatee-info',[EvaluateeController::class,'evaluateeInfo']);
     Route::post('evaluatees/{user}/evaluatees-to-rate',[EvaluateeController::class,'getEvaluateesToRate']);
 
+    Route::apiResource('entity',EntityController::class)->only(['index']);
 
     Route::post('/rating',[RatingContoller::class,'store'])->withoutMiddleware('auth:sanctum');
 

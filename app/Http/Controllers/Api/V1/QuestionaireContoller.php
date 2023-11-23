@@ -7,17 +7,20 @@ use App\Models\Questionaire;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DepartmentResource;
+use App\Http\Resources\EntityResource;
 use App\Http\Resources\QuestionaireResource;
+use App\Models\Entity;
 
 class QuestionaireContoller extends Controller
 {
     public function forEvaluatee(Request $request)
     {
+
         $questionaire = cache()->remember(
-            'questionaire' . $request->departmend_id,
+            'questionaire' . $request->entity_id,
             now()->addDay(),
             function() use ($request){
-                return Department::with([
+                return Entity::with([
                     'questionaires' =>function($q){
                         $q->with([
                             'criterias' => function($query){
@@ -33,12 +36,12 @@ class QuestionaireContoller extends Controller
                         ;
                     }
                 ])
-                ->find($request->departmend_id);
+                ->find($request->entity_id);
             }
         );
 
 
-        return new DepartmentResource($questionaire);
+        return new EntityResource($questionaire);
 
     }
 

@@ -13,8 +13,8 @@ use App\Models\SectionYear;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -63,8 +63,6 @@ class User extends Authenticatable
        return $this->hasOne(UserInfo::class,'user_id','id_number');
     }
 
-
-
     public function questions(): HasManyThrough
     {
         return $this->hasManyThrough(Question::class,Rating::class,'evaluator_id','id','id_number','question_id');
@@ -86,9 +84,9 @@ class User extends Authenticatable
 
     }
 
-    public function roles(): MorphToMany
+    public function role(): BelongsTo
     {
-        return $this->morphToMany(Role::class,'roleable')->withTimestamps();
+        return $this->BelongsTo(Role::class);
     }
 
     public function sectionYearsPerUser():BelongsToMany

@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('roleables', function (Blueprint $table) {
-            $table->foreignId('role_id')->constrained();
-            $table->morphs('roleable');
+        Schema::create('entities', function (Blueprint $table) {
+            $table->id();
+            $table->string('entity_name');
             $table->timestamps();
         });
     }
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('roleables');
+        Schema::dropIfExists('entities');
     }
 };

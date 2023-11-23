@@ -3,26 +3,18 @@
 namespace App\Models;
 
 use App\Models\User;
-use App\Models\Evaluatee;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Role extends Model
 {
     use HasFactory;
 
     protected $fillable = ['name'];
-    protected $hidden = ['pivot'];
 
-
-    public function evaluatees()
+    public function users():HasMany
     {
-        return $this->morphedByMany(Evaluatee::class,'roleable')->withTimestamps();
-    }
-
-
-    public function users()
-    {
-        return $this->morphedByMany(User::class,'roleable')->withTimestamps();
+        return $this->HasMany(User::class)->withTimestamps();
     }
 }

@@ -17,7 +17,14 @@ class SectionYearResource extends JsonResource
         return [
             'id' => $this->id,
             'year_section' => $this->s_y,
+            'pivot' => $this->whenLoaded('pivot', function(){
+                return [
+                    'is_done' => $this->pivot->is_done,
+                    'rated_on' => $this->pivot->updated_at
+                ];
+            }),
             'classes' => KlassesResource::collection($this->whenLoaded('klasses')),
+
         ];
     }
 }

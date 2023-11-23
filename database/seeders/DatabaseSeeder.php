@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\Criteria;
 use App\Models\Department;
+use App\Models\Entity;
 use App\Models\Question;
 use App\Models\UserInfo;
 use App\Models\Evaluatee;
@@ -22,15 +23,15 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         ////<----this function is for no ratings
-        $this->call([TestSeeder::class,DepartmentSeeder::class,RoleSeeder::class]);
+        $this->call([SubjectSectionSeeder::class,TestSeeder::class,DepartmentSeeder::class,RoleSeeder::class]);
         ////-------->
 
-        $departments = Department::all();
+        $entities = Entity::all();
 
-        foreach ($departments as $department) {
-            $questionaires = Questionaire::factory(2)->create(['description' => 'This questionaire is for ' . $department->department]);
+        foreach ($entities as $entity) {
+            $questionaires = Questionaire::factory(2)->create(['description' => 'This questionaire is for ' . $entity->entity_name]);
             foreach($questionaires as $questionaire) {
-                $department->questionaires()->attach($questionaire->id);
+                $entity->questionaires()->attach($questionaire->id);
             }
         }
 

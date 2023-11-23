@@ -2,13 +2,15 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use App\Models\User;
 use App\Models\Klass;
+use App\Models\Entity;
 use App\Models\Subject;
 use App\Models\UserInfo;
 use App\Models\Evaluatee;
-use App\Models\KlassSection;
 use App\Models\SectionYear;
+use App\Models\KlassSection;
 use Illuminate\Database\Seeder;
 
 class TestSeeder extends Seeder
@@ -36,8 +38,22 @@ class TestSeeder extends Seeder
         // foreach ($subjects as $subject) {
         //     Subject::factory()->create(['name' => $subject]);
         // }
-        $this->call([SubjectSectionSeeder::class]);
-        $evaluatees = Evaluatee::factory(10)->create();
+
+        $entities = ['instructor','guard','canteen-staff'];
+        foreach ($entities as $entity) {
+            Entity::create(['entity_name' => $entity])->each(function($q){
+                Evaluatee::factory(10)->create(['entity_id'=>$q->id]);
+            });
+        }
+
+        $roles = ['student','admin','staff','chairperson'];
+        foreach ($roles as $role) {
+            Role::create(['name' => $role]);
+        }
+
+        $roleForStudent = Role::where('name','student')->first();
+
+        $evaluatees = Evaluatee::where('entity_id',1)->get();
 
         foreach ($evaluatees as $evaluatee) {
             $randomSubjects = Subject::inRandomOrder()->limit(3)->get();
@@ -51,12 +67,11 @@ class TestSeeder extends Seeder
         foreach ($klasses as $klass) {
             $randomeSections  = SectionYear::inRandomOrder()->limit(3)->get();
             foreach ($randomeSections as $randomSection) {
-                // $klass->sectionYears()->attach($randomSection->id);
                 KlassSection::factory()->create([
                     'klass_id' => $klass->id,
                     'section_year_id' => $randomSection->id,
                 ]);
-                $users = User::factory(10)->create();
+                $users = User::factory(10)->create(['role_id'=> $roleForStudent->id]);
                 foreach ($users as $user) {
                     $randomSection->sectionYearsPerUser()->attach($user->id_number);
                     UserInfo::factory()->create(['user_id' => $user->id_number]);

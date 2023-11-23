@@ -15,30 +15,23 @@ class DepartmentSeeder extends Seeder
     public function run(): void
     {
 
-        $deparments = ['bsit','bshrm','beed','bsed','guard','canteen-staff'];
+        $deparments = ['bsit','bshrm','beed','bsed'];
             foreach($deparments as $deparment){
                 Department::create(['department'=> $deparment]);
             }
 
        $users = User::all();
-       $evaluatees = Evaluatee::all();
+       $evaluatees = Evaluatee::where('entity_id',1)->get();
 
        foreach($users as $user){
         $randomDepartment = Department::inRandomOrder()->first();
         $user->departments()->attach($randomDepartment->id);
        }
 
-       foreach($evaluatees as $key => $evaluatee){
-            if($key < 15){
-                $department = Department::all()->except([4,5]);
+       foreach($evaluatees  as $evaluatee){
+                $department = Department::all();
                 $randomDepartment = $department->random();
                 $evaluatee->departments()->attach($randomDepartment->id);
-            }else{
-                $department = Department::all()->except([1,2,3]);
-                $randomDepartment = $department->random();
-                $evaluatee->departments()->attach($randomDepartment->id);
-            }
-
        }
 
     }

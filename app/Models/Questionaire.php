@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Entity;
 use App\Models\Criteria;
-use App\Models\Evaluatee;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -32,9 +32,9 @@ class Questionaire extends Model
         return $this->belongsToMany(Criteria::class,'criteria_questionaire')->withTimestamps();
     }
 
-    public function departments(): BelongsToMany
+    public function entities(): BelongsToMany
     {
-        return $this->belongsToMany(Questionaire::class,'departments_questionaires')->withTimestamps();
+        return $this->belongsToMany(Entity::class,'entities_questionaires')->withTimestamps();
     }
 
     public function scopeQuestionaireWithCriteria(Builder $query, $id= null)

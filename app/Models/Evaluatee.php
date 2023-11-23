@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
-use App\Models\Role;
 use App\Models\User;
 use App\Models\Klass;
+use App\Models\Entity;
 use App\Models\Rating;
 use App\Models\Subject;
 use App\Models\Department;
-use App\Models\Questionaire;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -39,11 +39,6 @@ class Evaluatee extends Model
                     ->withTimestamps();
     }
 
-    public function roles(): MorphToMany
-    {
-        return $this->morphToMany(Role::class,'roleable')->withTimestamps();
-    }
-
     public function subjects():BelongsToMany
     {
         return $this->belongsToMany(Subject::class,'Klasses','evaluatee_id','subject_id')
@@ -56,5 +51,9 @@ class Evaluatee extends Model
         return $this->hasMany(Klass::class);
     }
 
+    public function entity():BelongsTo
+    {
+        return $this->belongsTo(Entity::class);
+    }
 
 }

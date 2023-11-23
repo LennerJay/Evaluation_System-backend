@@ -16,7 +16,7 @@ class AuthController extends Controller
             'id_number' => 'required|numeric',
             'password' => 'required',
         ]);
-        $user = User::where('id_number', $request->id_number)->first();
+        $user = User::with('role')->where('id_number', $request->id_number)->first();
         if(!$user|| !Hash::check($request->password, $user->password)){
 
             throw ValidationException::withMessages([
@@ -27,7 +27,7 @@ class AuthController extends Controller
         return response()->json([
             'token' => $user->createToken('laravel_api_token')->plainTextToken,
             'user' => $user
-        ]);
+        ],200);
     }
 
     public function logout(Request $request)
@@ -35,8 +35,4 @@ class AuthController extends Controller
         $request->user()->currentAccessToken()->delete();
     }
 
-    public function register()
-    {
-
-    }
 }

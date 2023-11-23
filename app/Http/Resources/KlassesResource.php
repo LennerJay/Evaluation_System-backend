@@ -20,6 +20,7 @@ class KlassesResource extends JsonResource
             'evaluatee' =>EvaluateeResource::make($this->whenLoaded('evaluatee')),
             'subject_id' => $this->subject_id,
             'evaluatee_id' => $this->evaluatee_id,
+            'section_years'=>SectionYearResource::collection($this->whenLoaded('sectionYears')),
             'schedule' => $this->whenLoaded('pivot',function(){
                 return [
                     'time' => $this->pivot->time,

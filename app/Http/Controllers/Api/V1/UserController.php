@@ -20,7 +20,7 @@ class UserController extends Controller
             'AllUsers',
              3600,
             function () {
-            return  User::with(['roles','userInfo','departments','sectionYearsPerUser'])->get();
+            return  User::with(['role','userInfo','departments','sectionYearsPerUser'])->get();
         });
         // $users = User::with(['roles','userInfo','departments','sectionYearsPerUser'])->get();
 
@@ -35,7 +35,7 @@ class UserController extends Controller
             function(){
             return  User::with([
                 'departments',
-                'roles',
+                'role',
                 'userInfo',
                 'sectionYearsPerUser.klasses',
                 'sectionYearsPerUser.klasses.evaluatee',
@@ -54,7 +54,7 @@ class UserController extends Controller
             'getUser',
             now()->addDay(),
             function(){
-                return User::with('roles')
+                return User::with('role')
                 ->findOrFail(auth()->user()->id_number);
             }
         );

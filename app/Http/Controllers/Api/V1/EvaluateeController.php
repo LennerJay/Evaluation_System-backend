@@ -11,14 +11,10 @@ use App\Http\Resources\UserResource;
 
 class EvaluateeController extends Controller
 {
-
-
-
     public function index()
     {
-        $evaluatees = Evaluatee::with(['departments'])->get();
+        $evaluatees = Evaluatee::with(['departments','entity'])->get();
         return  EvaluateeResource::collection($evaluatees);
-
     }
 
     public function evaluateeInfo(Request $request)
@@ -32,11 +28,10 @@ class EvaluateeController extends Controller
                                             }])
                                             ->get();
                                     },
-                                    'departments'
+                                    'departments',
+                                    'entity'
                                     ])
                                     ->findOrFail($request->evaluatee_id);
-
-
         return response()->json($evaluatee);
     }
 
@@ -52,7 +47,7 @@ class EvaluateeController extends Controller
     public function getEvaluateesToRate(User $user){
 
 
-        $evaluatees = $user->evaluatees()->with(['roles','departments'])->get();
+        $evaluatees = $user->evaluatees()->with(['entity','departments'])->get();
         // return response()->json( $evaluatees);
         return EvaluateeResource::collection($evaluatees);
     }
