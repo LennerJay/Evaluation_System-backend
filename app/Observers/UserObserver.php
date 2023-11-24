@@ -12,6 +12,7 @@ class UserObserver
     public function created(User $user): void
     {
         cache()->forget("getUser");
+        cache()->forget("AllUsers");
     }
 
     /**

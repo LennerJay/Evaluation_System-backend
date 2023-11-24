@@ -10,6 +10,7 @@ use App\Http\Resources\UserResource;
 use App\Models\Klass;
 use App\Models\KlassSection;
 use App\Models\SectionYear;
+use App\Models\UserInfo;
 
 class UserController extends Controller
 {
@@ -51,7 +52,7 @@ class UserController extends Controller
     {
 
         $user = cache()->remember(
-            'getUser',
+            'getUser'. auth()->user()->id_number,
             now()->addDay(),
             function(){
                 return User::with('role')
@@ -78,7 +79,16 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = User::factory()->create([
+                'id_number' => $request->id_number,
+                'role_id' => $request->role_id
+            ]);
+        UserInfo::factory()->create(['user_id' => $user->id_number]);
+
+        return response()->json([
+            'success' =>" User stored successfully",
+            'user' => $user->load('role')
+        ]);
     }
 
     /**

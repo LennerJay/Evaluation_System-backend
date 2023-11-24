@@ -2,14 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
+
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\v1\DashboardController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\v1\UserController;
 use App\Http\Controllers\Api\V1\RatingContoller;
+use App\Http\Controllers\Api\v1\EntityController;
+use App\Http\Controllers\Api\v1\DashboardController;
 use App\Http\Controllers\Api\V1\EvaluateeController;
 use App\Http\Controllers\Api\v1\DepartmentController;
-use App\Http\Controllers\Api\v1\EntityController;
 use App\Http\Controllers\Api\V1\QuestionaireContoller;
 use App\Http\Controllers\Api\V1\SectionYearController;
 
@@ -20,7 +21,7 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
     Route::post('/questionaires/for-evaluatee',[QuestionaireContoller::class,'forEvaluatee']);
 
 
-    Route::apiResource('evaluatees',EvaluateeController::class)->only(['index','destroy']);
+    Route::apiResource('evaluatees',EvaluateeController::class)->only(['index','store','destroy']);
     Route::post('evaluatees/evaluated',[EvaluateeController::class,'evaluated']);
     Route::post('evaluatees/evaluatee-info',[EvaluateeController::class,'evaluateeInfo']);
     Route::post('evaluatees/{user}/evaluatees-to-rate',[EvaluateeController::class,'getEvaluateesToRate']);
@@ -33,7 +34,7 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
 
     Route::apiResource('roles',RoleController::class)->only(['index'])->withoutMiddleware('auth:sanctum');
 
-    Route::apiResource('users',UserController::class)->only(['index']);
+    Route::apiResource('users',UserController::class)->only(['index','store']);
     Route::get('users/user-info',[UserController::class,'getUserInfo']);
     Route::get('users/user',[UserController::class,'getUser']);
 

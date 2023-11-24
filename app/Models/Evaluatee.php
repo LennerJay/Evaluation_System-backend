@@ -19,7 +19,11 @@ class Evaluatee extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'name',
+        'entity_id',
+        'job_type'
+    ];
     // protected $hidden = ['pivot'];
 
     public function ratings(): HasMany

@@ -6,6 +6,7 @@ namespace App\Providers;
 use App\Models\User;
 use App\Models\Questionaire;
 use App\Observers\UserObserver;
+use Illuminate\Support\Facades\Gate;
 use App\Observers\QuestionaireObserver;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -31,6 +32,12 @@ class AppServiceProvider extends ServiceProvider
             'evaluatee' =>'App\Models\Evaluatee',
             'user'=> 'App\Models\User',
         ]);
+
+
+        Gate::define('allow-action',function(User $user){
+            return $user->role_id === 2 || $user->role_id === 3;
+        });
+
 
     }
 }
