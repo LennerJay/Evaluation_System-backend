@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\SubjectResource;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 
 class SubjectController extends Controller
@@ -12,7 +14,16 @@ class SubjectController extends Controller
      */
     public function index()
     {
-        //
+        $subject = cache()->remember(
+            'allSubjects',
+            now()->addDay(),
+            function(){
+                return Subject::all();
+            }
+        );
+
+        return SubjectResource::collection($subject);
+        // return response()->json(Subject::all());
     }
 
     /**

@@ -13,6 +13,8 @@ use App\Http\Controllers\Api\V1\EvaluateeController;
 use App\Http\Controllers\Api\v1\DepartmentController;
 use App\Http\Controllers\Api\V1\QuestionaireContoller;
 use App\Http\Controllers\Api\V1\SectionYearController;
+use App\Http\Controllers\Api\v1\SubjectController;
+use App\Models\SectionYear;
 
 Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
 
@@ -28,6 +30,7 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
 
     Route::apiResource('entity',EntityController::class)->only(['index']);
 
+
     Route::post('/rating',[RatingContoller::class,'store'])->withoutMiddleware('auth:sanctum');
 
     Route::apiResource('departments',DepartmentController::class)->only(['index'])->withoutMiddleware('auth:sanctum');
@@ -37,6 +40,9 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
     Route::apiResource('users',UserController::class)->only(['index','store']);
     Route::get('users/user-info',[UserController::class,'getUserInfo']);
     Route::get('users/user',[UserController::class,'getUser']);
+
+
+    Route::apiResource('subjects',SubjectController::class)->only(['index']);
 
 
     Route::apiResource('section-year',SectionYearController::class)->only(['index']);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use Exception;
 use Throwable;
 use App\Models\User;
 use App\Models\Evaluatee;
@@ -27,19 +28,36 @@ class EvaluateeController extends Controller
 
     public function store(EvaluateeRequest $request)
     {
-        if(! Gate::allows('allow-action',auth()->user())){
-            abort(403);
-        }
-        Evaluatee::create([
-            'name' => $request->name,
-            'entity_id'=>$request->entity_id,
-            'job_type' => $request->job_type
-        ]);
 
-        return response()->json([
-            'message'=>'Successfully created',
-            'evaluatees' => $this->index()
-        ],200);
+        // try{
+
+        //     $evaluatee =  Evaluatee::create([
+        //         'name' => $request->name,
+        //         'entity_id'=>$request->entity_id,
+        //         'job_type' => $request->job_type
+        //     ]);
+        //     if(count($request->classes) != 0){
+        //         foreach($request->classes as $class){
+        //         $klass =  $evaluatee->subjects()->attach($class['subject']->id);
+        //             foreach( $class->schedules as $schedule){
+        //                 $klass->sectionYears()->attach($schedule->sectionYear->id,['time'=>$schedule->time,'day'=>$schedule->day]);
+        //             }
+        //         }
+        //     }
+        // return response()->json([
+        //     'message'=>'Successfully created',
+        //     'evaluatees' => $this->index()
+        // ],200);
+
+        // }catch(Exception $e){
+        //     return response()->json([
+        //         'error' => $e->getMessage(),
+        //     ]);
+        // }
+
+
+        return response()->json($request->classes[0]['subject']->name);
+
     }
 
     public function update(Request $request, string $id)

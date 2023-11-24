@@ -12,8 +12,13 @@ class SectionYearController extends Controller
 
     public function index()
     {
-        $sy = SectionYear::all();
-
+        $sy = cache()->remember(
+            'allSectionYears',
+            now()->addDay(),
+            function(){
+                return SectionYear::all();
+            }
+        );
         return SectionYearResource::collection($sy);
     }
 
