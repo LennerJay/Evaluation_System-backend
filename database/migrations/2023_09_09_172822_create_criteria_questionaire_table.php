@@ -13,8 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('criteria_questionaire', function (Blueprint $table) {
-            $table->foreignId('criteria_id')->constrained();
-            $table->foreignId('questionaire_id')->constrained();
+            $table->foreignId('criteria_id')->constrained()->onDelete('cascade');
+            $table->foreignId('questionaire_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

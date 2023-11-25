@@ -12,6 +12,8 @@ use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\EvaluateeRequest;
 use App\Http\Resources\EvaluateeResource;
+use App\Models\Klass;
+use App\Models\SectionYear;
 
 class EvaluateeController extends Controller
 {
@@ -29,34 +31,45 @@ class EvaluateeController extends Controller
     public function store(EvaluateeRequest $request)
     {
 
-        // try{
+        try{
+            $isEvaluateeExist = Evaluatee::where('name', $request->name)->exists();
+            if(!$isEvaluateeExist){
+                $evaluatee =  Evaluatee::create([
+                    'name' => $request->name,
+                    'entity_id'=>$request->entity_id,
+                    'job_type' => $request->job_type
+                ]);
+                $evaluatee->departments()->attach($request->department_id);
 
-        //     $evaluatee =  Evaluatee::create([
-        //         'name' => $request->name,
-        //         'entity_id'=>$request->entity_id,
-        //         'job_type' => $request->job_type
-        //     ]);
-        //     if(count($request->classes) != 0){
-        //         foreach($request->classes as $class){
-        //         $klass =  $evaluatee->subjects()->attach($class['subject']->id);
-        //             foreach( $class->schedules as $schedule){
-        //                 $klass->sectionYears()->attach($schedule->sectionYear->id,['time'=>$schedule->time,'day'=>$schedule->day]);
-        //             }
-        //         }
-        //     }
-        // return response()->json([
-        //     'message'=>'Successfully created',
-        //     'evaluatees' => $this->index()
-        // ],200);
+                if($request->classes){
+                    foreach($request->classes as $class){
+                     $evaluatee->subjects()->attach($class['subject']['id']);
+                     $klass = Klass::where('evaluatee_id', $evaluatee->id)
+                                    ->where('subject_id',$class['subject']['id'])
+                                    ->first();;
+                        foreach( $class['schedules'] as $schedule){
+                            $klass->sectionYears()->attach($schedule['sectionYear']['id'],['time'=>$schedule['time'],'day'=>$schedule['day']]);
+                        }
 
-        // }catch(Exception $e){
-        //     return response()->json([
-        //         'error' => $e->getMessage(),
-        //     ]);
-        // }
+                    // $klass->load('sectionYears');
+                    }
+                }
+            }else{
+                return response()->json(['message' => 'Name already exists'], 400);
+            }
 
+            return response()->json([
+                'message'=>'Successfully created',
+                'evaluatees' => $this->index()
+            ],200);
 
-        return response()->json($request->classes[0]['subject']->name);
+        }catch(Exception $e){
+            return response()->json([
+                'error' => $e->getMessage(),
+            ]);
+        }
+        // gettype($request->classes[0]['subject'])
+
 
     }
 
@@ -70,8 +83,10 @@ class EvaluateeController extends Controller
     {
         $evaluatee->delete();
 
-
-        return response()->json(["message"=> "Delete Successfully"],200);
+        return response()->json([
+            "message"=> "Delete Successfully",
+            "evaluatees" => Evaluatee::all(),
+        ],200);
     }
 
     public function evaluateeInfo(Request $request)
