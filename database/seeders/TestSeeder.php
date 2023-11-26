@@ -77,7 +77,6 @@ class TestSeeder extends Seeder
                     UserInfo::factory()->create(['user_id' => $user->id_number]);
                 }
             }
-
         }
 
         $klasses = Klass::with([

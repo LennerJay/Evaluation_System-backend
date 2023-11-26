@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\User;
-use App\Models\Klass;
-use App\Models\KlassSection;
+
+use App\Models\Department;
+use App\Models\SectionYearDepartment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,22 +17,15 @@ class SectionYear extends Model
     protected $fillable = ['s_y'];
     // protected $hidden = ['pivot'];
 
-    public function sectionYearsPerUser():BelongsToMany
+    public function departments():BelongsToMany
     {
-        return $this->belongsToMany(User::class,'section_per_users','section_year_id','user_id')->withTimestamps();
+        return $this->belongsToMany(Department::class,'section_year_departments','section_year_id','department_id')
+                    ->withTimestamps();;
     }
 
-    public function klasses(): BelongsToMany
+    public function sectionYearDepartments():HasMany
     {
-        return $this->belongsToMany(Klass::class,'klass_sections','section_year_id','klass_id')
-        ->withPivot(['time','day'])
-        ->withTimestamps();
+        return $this->hasMany(SectionYearDepartment::class,'section_year_id','id');
     }
-
-    public function klassSections(): HasMany
-    {
-        return $this->hasMany(KlassSection::class,'section_year_id','id')->withTimestamps();
-    }
-
 
 }

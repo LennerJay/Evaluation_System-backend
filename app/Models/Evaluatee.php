@@ -8,11 +8,11 @@ use App\Models\Entity;
 use App\Models\Rating;
 use App\Models\Subject;
 use App\Models\Department;
+use App\Models\EvaluateeDepartment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Evaluatee extends Model
@@ -24,16 +24,19 @@ class Evaluatee extends Model
         'entity_id',
         'job_type'
     ];
-    // protected $hidden = ['pivot'];
 
     public function ratings(): HasMany
     {
         return $this->hasMany(Rating::class);
     }
-
-    public function departments():MorphToMany
+    public function klasses(): HasMany
     {
-        return $this->morphToMany(Department::class,'departmentable')->withTimestamps();
+        return $this->hasMany(Klass::class);
+    }
+
+    public function evaluateeDepartments():HasMany
+    {
+        return $this->hasMany(EvaluateeDepartment::class);
     }
 
     public function users(): BelongsToMany
@@ -43,17 +46,12 @@ class Evaluatee extends Model
                     ->withTimestamps();
     }
 
-    public function subjects():BelongsToMany
+    public function departments():BelongsToMany
     {
-        return $this->belongsToMany(Subject::class,'Klasses','evaluatee_id','subject_id')
-                    ->withPivot('id')
+        return $this->belongsToMany(Department::class,'evaluatee_departments','evaluatee_id','department_id')
                     ->withTimestamps();
     }
 
-    public function klasses(): HasMany
-    {
-        return $this->hasMany(Klass::class);
-    }
 
     public function entity():BelongsTo
     {

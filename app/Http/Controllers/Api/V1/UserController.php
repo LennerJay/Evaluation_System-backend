@@ -35,7 +35,7 @@ class UserController extends Controller
             now()->addDay(),
             function(){
             return  User::with([
-                'departments',
+                'department',
                 'role',
                 'userInfo',
                 'sectionYearsPerUser.klasses',

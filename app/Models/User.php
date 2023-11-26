@@ -8,14 +8,13 @@ use App\Models\Rating;
 use App\Models\Question;
 use App\Models\UserInfo;
 use App\Models\Evaluatee;
-use App\Models\Department;
-use App\Models\SectionYear;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\SectionYearDepartment;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -63,25 +62,21 @@ class User extends Authenticatable
        return $this->hasOne(UserInfo::class,'user_id','id_number');
     }
 
+    public function ratings():HasMany
+    {
+        return $this->hasMany(Ratings::class,'user_id','id_number');
+    }
+
     public function questions(): HasManyThrough
     {
         return $this->hasManyThrough(Question::class,Rating::class,'evaluator_id','id','id_number','question_id');
     }
-
-
-    public function departments():MorphToMany
-    {
-        return $this->morphToMany(Department::class, 'departmentable')
-            ->withTimestamps();
-    }
-
 
     public function evaluatees():BelongsToMany
     {
         return $this->belongsToMany(Evaluatee::class,'evaluatees_users','user_id','evaluatee_id')
                     ->withPivot('is_done')
                     ->withTimestamps();
-
     }
 
     public function role(): BelongsTo
@@ -89,9 +84,10 @@ class User extends Authenticatable
         return $this->BelongsTo(Role::class);
     }
 
-    public function sectionYearsPerUser():BelongsToMany
+    public function sectionYearDepartment():BelongsToMany
     {
-        return $this->belongsToMany(SectionYear::class,'section_per_users','user_id','section_year_id')->withTimestamps();
+        return $this->belongsToMany(SectionYearDepartment::class,'section_per_users','user_id','s_y_d_id','id_number','id')
+                    ->withTimestamps();
     }
 
 }

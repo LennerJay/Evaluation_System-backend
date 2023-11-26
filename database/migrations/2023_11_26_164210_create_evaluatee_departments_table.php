@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('departmentables', function (Blueprint $table) {
+        Schema::create('evaluatee_departments', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('evaluatee_id')->constrained();
             $table->foreignId('department_id')->constrained();
-            $table->morphs('departmentable');
             $table->timestamps();
         });
     }
@@ -23,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('departmentables');
+        Schema::dropIfExists('evaluatee_departments');
     }
 };

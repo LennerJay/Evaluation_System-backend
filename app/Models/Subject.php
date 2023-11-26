@@ -26,4 +26,5 @@ class Subject extends Model
                     ->withPivot('id')
                     ->withTimestamps();
     }
+
 }

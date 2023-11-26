@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('section_per_users', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained('users','id_number')->onDelete('cascade');
-            $table->foreignId('section_year_id')->constrained('section_years','id')->onDelete('cascade');
+        Schema::create('departments', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('section_per_users');
+        Schema::dropIfExists('departments');
     }
 };
