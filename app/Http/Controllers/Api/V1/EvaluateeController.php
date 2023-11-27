@@ -9,21 +9,18 @@ use App\Models\Evaluatee;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
-use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\EvaluateeRequest;
 use App\Http\Resources\EvaluateeResource;
 use App\Models\Klass;
 use App\Models\SectionYear;
+use App\Service\EvaluateeControllerService\EvaluateeService;
 
 class EvaluateeController extends Controller
 {
     public function index()
     {
         $evaluatees = Evaluatee::with([
-            'departments'=>function($q){
-                $q->distinct();
-            }
-            ,'entity'])->latest()->get();
+            'departments','entity'])->latest()->get();
         return  EvaluateeResource::collection($evaluatees);
     }
 
@@ -96,21 +93,9 @@ class EvaluateeController extends Controller
     public function evaluateeInfo(Request $request)
     {
 
-        $evaluatee = Evaluatee::with([
-                                    'klasses' => function($query){
-                                        $query->with('subject')
-                                            ->with(['sectionYears'=>function($q){
-                                                    $q->withCount('sectionYearsPerUser');
-                                            }])
-                                            ->get();
-                                    },
-                                    'departments',
-                                    'entity'
-                                    ])
-                                    ->findOrFail($request->evaluatee_id);
-
-
-        return response()->json($evaluatee);
+        $res =(new EvaluateeService)->fetchEvaluateInfo($request->evaluatee_id);
+        return response()->json( $res);
+        // return new EvaluateeResource($evaluatee);
     }
 
     public function evaluated(Request $request)

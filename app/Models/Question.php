@@ -18,6 +18,9 @@ class Question extends Model
     use HasFactory;
     protected $fillable = ['question'];
 
+    protected $hidden = ['updated_at', 'created_at'];
+
+
     public function criteria(): BelongsTo
     {
         return $this->belongsTo(Criteria::class);

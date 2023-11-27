@@ -17,6 +17,8 @@ class SectionYear extends Model
     protected $fillable = ['s_y'];
     // protected $hidden = ['pivot'];
 
+    protected $hidden = ['updated_at', 'created_at'];
+
     public function departments():BelongsToMany
     {
         return $this->belongsToMany(Department::class,'section_year_departments','section_year_id','department_id')

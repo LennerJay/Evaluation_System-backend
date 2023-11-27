@@ -15,6 +15,8 @@ class EvaluateeDepartment extends Model
 {
     use HasFactory;
 
+    protected $hidden = ['updated_at', 'created_at'];
+
     public function department():BelongsTo
     {
         return $this->belongsTo(Department::class);
@@ -27,7 +29,7 @@ class EvaluateeDepartment extends Model
 
     public function klasses():HasMany
     {
-        return $this->hasMany(Klass::class);
+        return $this->hasMany(Klass::class,'e_d_id','id');
     }
 
     public function subjects():BelongsToMany

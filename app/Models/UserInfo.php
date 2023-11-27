@@ -21,6 +21,8 @@ class UserInfo extends Model
         'email_verified_at',
     ];
 
+    protected $hidden = ['updated_at', 'created_at'];
+
     public function user()
     {
        return $this->belongsTo(User::class,'id_number','user_id');

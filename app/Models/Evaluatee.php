@@ -24,6 +24,7 @@ class Evaluatee extends Model
         'entity_id',
         'job_type'
     ];
+    protected $hidden = ['updated_at', 'created_at'];
 
     public function ratings(): HasMany
     {

@@ -16,7 +16,7 @@ class DepartmentResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'department' => $this->department,
+            'name' => $this->name,
             'questionaires' => QuestionaireResource::collection($this->whenLoaded('questionaires')),
         ];
     }

@@ -21,7 +21,7 @@ class UserController extends Controller
             'AllUsers',
              3600,
             function () {
-            return  User::with(['role','userInfo','departments','sectionYearsPerUser'])->get();
+            return  User::with(['role','userInfo','sectionYearsPerUser'])->get();
         });
         // $users = User::with(['roles','userInfo','departments','sectionYearsPerUser'])->get();
 

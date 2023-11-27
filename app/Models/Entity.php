@@ -14,7 +14,7 @@ class Entity extends Model
     use HasFactory;
 
     protected $fillable = ['entity_name'];
-
+    protected $hidden = ['updated_at', 'created_at'];
 
     public function questionaires():BelongsToMany
     {

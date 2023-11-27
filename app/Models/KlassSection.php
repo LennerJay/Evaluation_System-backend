@@ -15,6 +15,8 @@ class klassSection extends Model
 {
     use HasFactory;
 
+    protected $hidden = ['updated_at', 'created_at'];
+
     public function users():BelongsToMany
     {
         return $this->belongsToMany(User::class,'section_per_users','klass_section_id','user_id','id','id_number')
@@ -23,7 +25,7 @@ class klassSection extends Model
 
     public function sectionYearDepartment():BelongsTo
     {
-        return $this->belongsTo(SectionYearDepartment::class);
+        return $this->belongsTo(SectionYearDepartment::class,'s_y_d_id','id');
     }
 
     public function department():BelongsTo

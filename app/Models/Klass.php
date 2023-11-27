@@ -20,6 +20,8 @@ class Klass extends Model
     use HasFactory;
     // protected $hidden = ['pivot'];
 
+    protected $hidden = ['updated_at', 'created_at'];
+
     public function subject():BelongsTo
     {
         return $this->belongsTo(Subject::class);

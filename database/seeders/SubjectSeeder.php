@@ -42,5 +42,22 @@ class SubjectSeeder extends Seeder
 
             });
         }
+
+        Evaluatee::factory(10)->create(['entity_id'=>$instructorId])->each(function($evaluatee){
+            $randomDepartments = Department::inRandomOrder()->take(2)->get();
+            foreach($randomDepartments as $department){
+                $eD= EvaluateeDepartment::create([
+                    'evaluatee_id' => $evaluatee->id,
+                    'department_id' => $department->id
+                ]);
+                $randomSubjects = Subject::inRandomOrder()->take(1)->get();
+                foreach ($randomSubjects as $subject){
+                    Klass::create([
+                        'subject_id' => $subject->id,
+                        'e_d_id'=> $eD->id
+                    ]);
+                }
+            }
+        });
     }
 }

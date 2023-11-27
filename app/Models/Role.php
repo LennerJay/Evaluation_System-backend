@@ -13,6 +13,8 @@ class Role extends Model
 
     protected $fillable = ['name'];
 
+    protected $hidden = ['updated_at', 'created_at'];
+
     public function users():HasMany
     {
         return $this->HasMany(User::class)->withTimestamps();

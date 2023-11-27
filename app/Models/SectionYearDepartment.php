@@ -16,12 +16,14 @@ class SectionYearDepartment extends Model
 {
     use HasFactory;
 
+    protected $hidden = ['updated_at', 'created_at'];
+
     public function department():BelongsTo
     {
         return $this->belongsTo(Department::class);
     }
 
-    public function sectionYears():BelongsTo
+    public function sectionYear():BelongsTo
     {
         return $this->belongsTo(SectionYear::class);
     }

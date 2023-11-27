@@ -21,6 +21,8 @@ class Rating extends Model
         'rating'
     ];
 
+    protected $hidden = ['updated_at', 'created_at'];
+
     public function evaluatees(): BelongsTo
     {
         return $this->belongsTo(Evaluatee::class);
