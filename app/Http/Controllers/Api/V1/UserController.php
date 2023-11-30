@@ -23,12 +23,50 @@ class UserController extends Controller
             function () {
             return  User::with(['role','userInfo','sectionYearsPerUser'])->get();
         });
-        // $users = User::with(['roles','userInfo','departments','sectionYearsPerUser'])->get();
 
         return  UserResource::collection($users);
     }
 
-    public function getUserInfo()
+
+
+    public function create()
+    {
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $user = User::factory()->create([
+                'id_number' => $request->id_number,
+                'role_id' => $request->role_id
+            ]);
+        UserInfo::factory()->create(['user_id' => $user->id_number]);
+
+        return response()->json([
+            'success' =>" User stored successfully",
+            'user' => $user->load('role')
+        ]);
+    }
+
+
+    public function update(Request $request, string $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
+    }
+
+
+    public function getUserInfos()
     {
         $user = cache()->remember(
             'getUserInfo' . auth()->user()->id_number,
@@ -67,59 +105,5 @@ class UserController extends Controller
         $evaluatees = $user->evaluatees()->with(['roles','departments'])->get();
         // return response()->json( $evaluatees);
         return EvaluateeResource::collection($evaluatees);
-    }
-
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $user = User::factory()->create([
-                'id_number' => $request->id_number,
-                'role_id' => $request->role_id
-            ]);
-        UserInfo::factory()->create(['user_id' => $user->id_number]);
-
-        return response()->json([
-            'success' =>" User stored successfully",
-            'user' => $user->load('role')
-        ]);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

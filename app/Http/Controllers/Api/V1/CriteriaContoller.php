@@ -2,64 +2,79 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
+use Exception;
+use PDOException;
+use App\Models\Criteria;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\CriteriaRequest;
+use App\Http\Resources\CriteriaResource;
 
 class CriteriaContoller extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
+    public function __construct()
+    {
+        $this->authorizeResource(Criteria::class,'criteria');
+    }
+
     public function index()
     {
-        //
+        return $this->return_success(CriteriaResource::collection(Criteria::all()));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+
+    public function withQuestions(Criteria $criteria)
     {
-        //
+        try{
+            return $this->return_success($criteria->with('questions')->get());
+        }catch(PDOException $e){
+            return $this->return_error($e);
+        }catch(Exception $e){
+            return $this->return_error($e);
+        }
+
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+
+    public function store(CriteriaRequest $request)
     {
-        //
+        try{
+            $criteria = Criteria::create([
+                'description' => $request->description
+            ]);
+            return $this->return_success(CriteriaResource::make($criteria));
+        }catch(PDOException $e){
+            return $this->return_error($e);
+        }catch(Exception $e){
+            return $this->return_error($e);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+
+    public function update(CriteriaRequest $request, Criteria $criteria)
     {
-        //
+        try{
+            $criteria->description = $request->description;
+            $criteria->save();
+            return $this->return_success($criteria);
+        }catch(PDOException $e){
+            return $this->return_error($e);
+        }catch(Exception $e){
+            return $this->return_error($e);
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Criteria $criteria)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        try{
+            $criteria->delete();
+            return $this->return_success('Successfully deleted');
+        }catch(PDOException $e){
+            return $this->return_error($e);
+        }catch(Exception $e){
+            return $this->return_error($e);
+        }
     }
 }

@@ -18,7 +18,7 @@ class UserInfo extends Model
         'mobile_number',
         'course',
         'email',
-        'email_verified_at',
+        'regular'
     ];
 
     protected $hidden = ['updated_at', 'created_at'];

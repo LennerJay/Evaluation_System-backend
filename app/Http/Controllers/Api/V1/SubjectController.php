@@ -2,16 +2,22 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\SubjectResource;
+use Exception;
+use PDOException;
 use App\Models\Subject;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\SubjectRequest;
+use App\Http\Resources\SubjectResource;
 
 class SubjectController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
+    public function __construct()
+    {
+        $this->authorizeResource(Subject::class, 'subject');
+    }
+
     public function index()
     {
         $subject = cache()->remember(
@@ -22,55 +28,51 @@ class SubjectController extends Controller
             }
         );
 
-        return SubjectResource::collection($subject);
+        return $this->return_success(SubjectResource::collection($subject));
         // return response()->json(Subject::all());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(SubjectRequest $request)
     {
-        //
+        try{
+
+            $subject = Subject::create([
+                'name' => $request->name
+            ]);
+
+            return $this->return_success($subject);
+        }catch(PDOException $e){
+            return $this->return_error($e);
+        }catch(Exception $e){
+            return $this->return_error($e);
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+
+
+    public function update(SubjectRequest $request, Subject $subject)
     {
-        //
+        try{
+
+            $subject->name = $request->name;
+            $subject->save();
+            return $this->return_success($subject);
+        }catch(PDOException $e){
+            return $this->return_error($e);
+        }catch(  Exception $e){
+            return $this->return_error($e);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function destroy(Subject $subject)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        try{
+            $subject->delete();
+            return response()->json(['success' => 'Deleted successfully']);
+        }catch(PDOException $e){
+            return $this->return_error($e);
+        }catch(Exception $e){
+            return $this->return_error($e);
+        }
     }
 }

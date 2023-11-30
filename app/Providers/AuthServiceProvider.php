@@ -3,6 +3,12 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+
+use App\Models\Questionaire;
+use App\Models\Role;
+use App\Models\User;
+use App\Policies\QuestionairePolicy;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -13,7 +19,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        //
+        // Questionaire::class => QuestionairePolicy::class
     ];
 
     /**
@@ -21,6 +27,10 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+
+        Gate::define('allow-action',function(User $user){
+            return $user->role_id === Role::IS_ADMIN || $user->role_id === Role::IS_STAFF;
+        });
+
     }
 }

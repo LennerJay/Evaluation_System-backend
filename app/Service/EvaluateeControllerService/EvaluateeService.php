@@ -13,12 +13,9 @@ class EvaluateeService{
                         'klasses'=>function($q){
                             $q->with([
                                 'subject',
-                                'klassSections' => function($q){
-                                    $q->with([
-                                        'sectionYearDepartment' => function($q){
-                                            $q->with('sectionYear');
-                                        }
-                                    ]);
+                                'sectionYearDepartment'
+                                => function($q){
+                                    $q->with('sectionYear');
                                 }
                             ]);
                         }

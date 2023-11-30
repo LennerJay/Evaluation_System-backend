@@ -12,6 +12,7 @@ class QuestionaireObserver
     public function created(Questionaire $questionaire): void
     {
         cache()->forget('questionaires');
+        cache()->flush('questionaires*');
     }
 
     /**
@@ -20,6 +21,7 @@ class QuestionaireObserver
     public function updated(Questionaire $questionaire): void
     {
         cache()->forget('questionaires');
+        cache()->flush('questionaires*');
     }
 
     /**
@@ -28,6 +30,7 @@ class QuestionaireObserver
     public function deleted(Questionaire $questionaire): void
     {
         cache()->forget('questionaires');
+        cache()->flush('questionaires*');
     }
 
     /**
@@ -36,6 +39,7 @@ class QuestionaireObserver
     public function restored(Questionaire $questionaire): void
     {
         cache()->forget('questionaires');
+        cache()->flush('questionaires*');
     }
 
     /**
@@ -44,5 +48,6 @@ class QuestionaireObserver
     public function forceDeleted(Questionaire $questionaire): void
     {
         cache()->forget('questionaires');
+        cache()->flush('questionaires*');
     }
 }

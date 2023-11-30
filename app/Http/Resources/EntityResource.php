@@ -14,10 +14,16 @@ class EntityResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
-            'id'=> $this->id,
-            'entity_name'=> $this->entity_name,
-            'questionaires' => QuestionaireResource::collection($this->whenLoaded('questionaires')),
-        ];
+        if ($this->questionaires) {
+            return [
+                'questionaires' => QuestionaireResource::collection($this->questionaires)
+            ];
+        } else {
+            return [
+                'id' => $this->id,
+                'entity_name' => $this->entity_name,
+                'questionaires' => QuestionaireResource::collection($this->questionaires)
+            ];
+        }
     }
 }

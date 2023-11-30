@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('email')->unique()->nullable();
             $table->unsignedBigInteger('mobile_number')->nullable();
             $table->integer('regular')->nullable();
-            $table->timestamp('email_verified_at')->nullable();
             $table->timestamps();
         });
     }

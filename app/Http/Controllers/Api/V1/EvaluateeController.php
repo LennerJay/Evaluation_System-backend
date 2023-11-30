@@ -22,6 +22,7 @@ class EvaluateeController extends Controller
         $evaluatees = Evaluatee::with([
             'departments','entity'])->latest()->get();
         return  EvaluateeResource::collection($evaluatees);
+        // return response()->json($evaluatees);
     }
 
 
@@ -87,23 +88,23 @@ class EvaluateeController extends Controller
         return response()->json([
             "message"=> "Delete Successfully",
             "evaluatees" => $this->index(),
-        ],200);
+        ]);
     }
 
     public function evaluateeInfo(Request $request)
     {
 
         $res =(new EvaluateeService)->fetchEvaluateInfo($request->evaluatee_id);
-        return response()->json( $res);
-        // return new EvaluateeResource($evaluatee);
+        // return response()->json( $res);
+        return new EvaluateeResource( $res);
     }
 
     public function evaluated(Request $request)
     {
-        $evaluateed = User::with(['evaluatees' => function($query){
+        $evaluatees = User::with(['evaluatees' => function($query){
                         $query->with(['departments','roles']);
                     }])->findOrFail($request->user_id);
-        return  new UserResource($evaluateed);
+        return  new UserResource($evaluatees);
 
     }
 

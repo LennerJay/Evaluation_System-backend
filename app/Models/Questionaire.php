@@ -16,7 +16,7 @@ class Questionaire extends Model
     use HasFactory;
 
 
-    protected $fillable =[
+    protected $fillable = [
         'title',
         'description',
         'semester',
@@ -25,7 +25,7 @@ class Questionaire extends Model
         'status'
     ];
 
-    protected $hidden = ['updated_at', 'created_at'];
+    protected $hidden = ['updated_at', 'created_at','pivot'];
 
     public function criterias(): BelongsToMany
     {
