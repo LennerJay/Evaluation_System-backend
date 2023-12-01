@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('section_per_users', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained('users','id_number');
-            $table->foreignId('s_y_d_id')->constrained('section_year_departments','id');
+            $table->foreignId('user_id')->constrained('users','id_number')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('s_y_d_id')->constrained('section_year_departments','id')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

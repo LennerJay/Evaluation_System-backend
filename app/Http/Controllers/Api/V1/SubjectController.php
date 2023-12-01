@@ -68,7 +68,7 @@ class SubjectController extends Controller
     {
         try{
             $subject->delete();
-            return response()->json(['success' => 'Deleted successfully']);
+            return $this->return_success('Deleted successfully');
         }catch(PDOException $e){
             return $this->return_error($e);
         }catch(Exception $e){

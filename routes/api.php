@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
-
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\V1\CriteriaContoller;
 use App\Http\Controllers\Api\V1\RoleController;
@@ -39,18 +38,19 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
     Route::apiResource('entities',EntityController::class);
 
 
-
     Route::post('/ratings',[RatingContoller::class,'store']);
 
     Route::apiResource('departments',DepartmentController::class);
 
     Route::apiResource('roles',RoleController::class)->only(['index']);
 
-    Route::apiResource('users',UserController::class)->only(['index','store']);
-    Route::get('users/user-infos',[UserController::class,'getUserInfos']);
+    Route::apiResource('users',UserController::class)->except(['show']);
+    // Route::get('users/user-infos',[UserController::class,'getUserInfos']);
     Route::get('users/user',[UserController::class,'getUser']);
+    Route::post('users/change-password',[UserController::class,'changePassword']);
+    Route::patch('users/{user}/reset-password',[UserController::class,'resetPassword']);
 
-    Route::apiResource('user-infos',UserInfoController::class)->except(['index','show']);
+    Route::apiResource('user-infos',UserInfoController::class)->except(['index','show','update']);
     Route::get('/user-infos',[UserInfoController::class,'showDetails']);
 
 

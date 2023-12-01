@@ -2,65 +2,34 @@
 
 namespace App\Policies;
 
-use Illuminate\Auth\Access\Response;
-use App\Models\UserInfo;
+use App\Models\Role;
 use App\Models\User;
+use App\Models\UserInfo;
+use Illuminate\Auth\Access\Response;
 
 class UserInfoPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
-    {
-        //
-    }
 
-    /**
-     * Determine whether the user can view the model.
-     */
     public function view(User $user, UserInfo $userInfo): bool
     {
-        //
+        return false;
     }
 
-    /**
-     * Determine whether the user can create models.
-     */
+
     public function create(User $user): bool
     {
-        //
+        return in_array($user->role_id,[Role::IS_ADMIN, Role::IS_STAFF]);
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
     public function update(User $user, UserInfo $userInfo): bool
     {
-        //
+        return in_array($user->role_id,[Role::IS_ADMIN, Role::IS_STAFF]);
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
     public function delete(User $user, UserInfo $userInfo): bool
     {
-        //
+        return in_array($user->role_id,[Role::IS_ADMIN, Role::IS_STAFF]);
+
     }
 
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, UserInfo $userInfo): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, UserInfo $userInfo): bool
-    {
-        //
-    }
 }

@@ -19,7 +19,7 @@ class UserFactory extends Factory
     {
         return [
             'id_number' => fake()->unique()->numberBetween(10000,1000000),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'password' => '$2y$10$q3gSs5ePbJY9lfaKvyTOpu1gTyZBOZiUe/t62qJ7zBmlCHEKRwNku', // password -> 123456
             'remember_token' => Str::random(10),
             'created_at' => now(),
             'updated_at' => now(),

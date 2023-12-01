@@ -21,6 +21,7 @@ class UserObserver
     public function updated(User $user): void
     {
         cache()->forget("getUser");
+        cache()->forget("AllUsers");
     }
 
     /**
@@ -29,6 +30,7 @@ class UserObserver
     public function deleted(User $user): void
     {
         cache()->forget("getUser");
+        cache()->forget("AllUsers");
     }
 
     /**

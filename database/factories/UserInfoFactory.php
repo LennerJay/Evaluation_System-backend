@@ -24,7 +24,6 @@ class UserInfoFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'mobile_number' => fake()->numerify('###########'),
             'regular' => fake()->randomElement([0,1]),
-            'email_verified_at' => now(),
         ];
     }
 }

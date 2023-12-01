@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use App\Models\Klass;
 use App\Models\Department;
 use App\Models\SectionYear;
@@ -16,7 +17,11 @@ class SectionYearDepartment extends Model
 {
     use HasFactory;
 
-    protected $hidden = ['updated_at', 'created_at'];
+    protected $hidden = [
+        'updated_at',
+        'created_at',
+        'pivot'
+    ];
 
     public function department():BelongsTo
     {

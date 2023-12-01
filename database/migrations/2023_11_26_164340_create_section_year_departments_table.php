@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('section_year_departments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('department_id')->constrained();
-            $table->foreignId('section_year_id')->constrained('section_years','id');
+            $table->foreignId('department_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('section_year_id')->constrained('section_years','id')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

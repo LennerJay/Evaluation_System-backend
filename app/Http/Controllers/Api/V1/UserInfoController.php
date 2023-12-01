@@ -8,60 +8,45 @@ use App\Models\UserInfo;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserInfoRequest;
+use App\Service\UserInfoControllerService\UserInfoService;
 use Exception;
 
 class UserInfoController extends Controller
 {
+    // private $userId=null;
+    public function __construct()
+    {
+        $this->authorizeResource(UserInfo::class);
+    }
     public function showDetails(Request $request)
     {
-        $validatedData = $request->validate([
-            'id_number' => 'numeric|integer|nullable',
-        ]);
-
-        if($validatedData){
-           $userId = $validatedData;
-
-        }else{
-            $userId = auth()->user()->id_number;
-        }
-
-
-
-
         try{
-            $userInfo = User::with('userInfo')->findOrfail( $userId);
-        }catch(Exception $e){
-            return $this->return_error($e->getMessage());
-        }
-
-        return $this->return_success($userInfo);
-
-    }
-
-    public function store(UserInfoRequest $request)
-    {
-        try{
-
-            $userInfo = UserInfo::create([
-                'user_id' => $request->user_id,
-                'first_name' => $request->first_name,
-                'middle_name' => $request->middle_name,
-                'last_name' => $request->last_name,
-                'mobile_number' => $request->mobile_number,
-                'course' => $request->course,
-                'email' => $request->email,
-                'regular' => $request->regular
-            ]);
+            $userInfo = (new UserInfoService($request))->getUserInfo();
             return $this->return_success($userInfo);
         }catch(PDOException $e){
             return $this->return_error($e);
+        }catch(Exception $e){
+            return $this->return_error($e);
+        }
+    }
+
+    public function store( UserInfoRequest $request)
+    {
+        try{
+            // $result = (new UserInfoService($request))->updateUserInfo();
+            // return $this->return_success($result);
+            return $this->return_success('test');
+        }catch(PDOException $e){
+            return $this->return_error($e);
         }catch(  Exception $e){
             return $this->return_error($e);
         }
 
     }
 
-    public function update(UserInfoRequest $request, string $id)
+
+
+    public function destroy(UserInfo $userInfo)
     {
         try{
 
@@ -72,17 +57,7 @@ class UserInfoController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        try{
 
-        }catch(PDOException $e){
-            return $this->return_error($e);
-        }catch(  Exception $e){
-            return $this->return_error($e);
-        }
-    }
+
+
 }

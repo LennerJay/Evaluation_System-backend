@@ -20,6 +20,6 @@ class Role extends Model
 
     public function users():HasMany
     {
-        return $this->HasMany(User::class)->withTimestamps();
+        return $this->HasMany(User::class);
     }
 }

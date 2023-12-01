@@ -21,7 +21,10 @@ class Controller extends BaseController
 
     public function return_error($data)
     {
-        return response()->json(['message'=>$data]);
+        return response()->json([
+            'success' => false,
+            'message'=>$data
+        ]);
     }
 
 }

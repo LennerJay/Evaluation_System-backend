@@ -45,7 +45,8 @@ class User extends Authenticatable
         'password',
         'remember_token',
         'updated_at',
-        'created_at'
+        'created_at',
+        'pivot'
     ];
     /**
      * The attributes that should be cast.
@@ -92,3 +93,4 @@ class User extends Authenticatable
     }
 
 }
+
