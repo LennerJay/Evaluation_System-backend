@@ -74,9 +74,9 @@ class UserController extends Controller
             $user->delete();
             return $this->return_success('Deleted successfully');
         }catch(PDOException $e){
-            return $this->return_error($e);
+            return $this->return_error($e->getMessage());
         }catch(Exception $e){
-            return $this->return_error($e);
+            return $this->return_error($e->getMessage());
         }
     }
 
@@ -142,9 +142,9 @@ class UserController extends Controller
             $result = (new UserService)->changePassword( $request->only('id_number','password'));
             return $this->return_success( $result);
         }catch(PDOException $e){
-            return $this->return_error($e);
+            return $this->return_error($e->getMessage());
         }catch(Exception $e){
-            return $this->return_error($e);
+            return $this->return_error($e->getMessage());
         }
     }
 }

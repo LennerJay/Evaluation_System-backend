@@ -4,25 +4,29 @@ namespace App\Http\Controllers\Api\V1;
 
 use Exception;
 use Throwable;
+use PDOException;
 use App\Models\User;
 use App\Models\Evaluatee;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\EvaluateeRequest;
 use App\Http\Resources\EvaluateeResource;
-use App\Models\Klass;
-use App\Models\SectionYear;
 use App\Service\EvaluateeControllerService\EvaluateeService;
 
 class EvaluateeController extends Controller
 {
     public function index()
     {
-        $evaluatees = Evaluatee::with([
-            'departments','entity'])->latest()->get();
-        return  EvaluateeResource::collection($evaluatees);
-        // return response()->json($evaluatees);
+        try{
+            $result = (new EvaluateeService)->fetchAllEvaluatees();
+            return $this->return_success( $result);
+        }catch(PDOException $e){
+            return $this->return_error($e);
+        }catch(Exception $e){
+            return $this->return_error($e);
+        }
     }
 
 
@@ -30,6 +34,20 @@ class EvaluateeController extends Controller
 
     public function store(EvaluateeRequest $request)
     {
+        try{
+            $isEvaluateeExist = Evaluatee::where('name', $request->name)->exists();
+
+            if($isEvaluateeExist){
+                return $this->return_error('Name Already Exists');
+            }
+            $result = (new EvaluateeService)->saveEvaluatees($request);
+            return $this->return_success($result);
+        }catch(PDOException $e){
+            return $this->return_error($e);
+        }catch(Exception $e){
+            return $this->return_error($e);
+        }
+
 
         // try{
         //     $isEvaluateeExist = Evaluatee::where('name', $request->name)->exists();
@@ -69,26 +87,37 @@ class EvaluateeController extends Controller
         //     ]);
         // }
         // gettype($request->classes[0]['subject'])
-        $isEvaluateeExist = Evaluatee::where('name', $request->name)->first();
 
-        return response()->json($isEvaluateeExist);
 
     }
 
-    public function update(Request $request, string $id)
+    public function update(Evaluatee $evaluatee,EvaluateeRequest $request)
     {
-        //
+
+        try{
+            $result = (new EvaluateeService)->updateEvaluatee( $evaluatee, $request );
+            return $this->return_success($result);
+        }catch(PDOException $e){
+            return $this->return_error($e);
+        }catch(Exception $e){
+            return $this->return_error($e);
+        }
     }
 
 
     public function destroy(Evaluatee $evaluatee)
     {
-        $evaluatee->delete();
-
-        return response()->json([
-            "message"=> "Delete Successfully",
-            "evaluatees" => $this->index(),
-        ]);
+        if(!Gate::allows('allow-action')){
+            return $this->return_error('You are not allowed to do this action');
+        }
+        try{
+            $evaluatee->delete();
+            return $this->return_success("Delete Successfully");
+        }catch(PDOException $e){
+            return $this->return_error($e);
+        }catch(Exception $e){
+            return $this->return_error($e);
+        }
     }
 
     public function evaluateeInfo(Request $request)
@@ -111,9 +140,6 @@ class EvaluateeController extends Controller
     public function getEvaluateesToRate(User $user)
     {
         $evaluatees = $user->evaluatees()->with(['entity','departments'])->get();
-
-
-        // return response()->json( $evaluatees);
         return EvaluateeResource::collection($evaluatees);
     }
 }

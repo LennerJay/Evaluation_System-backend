@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\v1;
 
 use PDOException;
-use App\Models\User;
 use App\Models\UserInfo;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -30,7 +29,6 @@ class UserInfoController extends Controller
         try{
             $result = (new UserInfoService)->updateUserInfo( $request);
             return $this->return_success($result);
-            // return $this->return_success(auth()->user());
         }catch(PDOException $e){
             return $this->return_error($e);
         }catch(  Exception $e){

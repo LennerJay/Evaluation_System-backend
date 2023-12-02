@@ -16,8 +16,8 @@ class isAdminStaffMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(!auth()->check() || auth()->user()->role_id !== Role::IS_ADMIN || auth()->user()->role_id !== Role::IS_STAFF){
-           abort(403);
+        if(auth()->user()->role_id != Role::IS_ADMIN || auth()->user()->role_id != Role::IS_STAFF){
+           return response()->json(['message'=>'You are not allowed to this route'],403);
         }
         return $next($request);
     }

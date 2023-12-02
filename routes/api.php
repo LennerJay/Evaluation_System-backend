@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\v1\AddCLassController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\v1\UserController;
 use App\Http\Controllers\Api\V1\RatingContoller;
@@ -26,26 +27,34 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
     Route::patch('/questionaires/{questionaire}/update-status',[QuestionaireContoller::class,'updateStatus']);
     Route::get('/questionaires/{questionaire}/with-criterias',[QuestionaireContoller::class,'withCriterias']);
 
-    Route::apiResource('questions',QuestionContoller::class)->only('store','update','destroy');
-
     Route::apiResource('criterias',CriteriaContoller::class);
     Route::get('/criterias/{criteria}/with-questions',[CriteriaContoller::class,'withQuestions']);
 
 
-    Route::apiResource('evaluatees',EvaluateeController::class)->only(['index','store','destroy']);
+    Route::apiResource('questions',QuestionContoller::class)->only('store','update','destroy');
+
+    Route::apiResource('evaluatees',EvaluateeController::class)->except('show');
     Route::post('evaluatees/evaluated',[EvaluateeController::class,'evaluated']);
     Route::post('evaluatees/evaluatee-info',[EvaluateeController::class,'evaluateeInfo']);
-    Route::post('evaluatees/{user}/evaluatees-to-rate',[EvaluateeController::class,'getEvaluateesToRate']);
+    Route::post('evaluatees/evaluatees-to-rate',[EvaluateeController::class,'getEvaluateesToRate']);
+
+    Route::group(['prefix' => 'class','middleware' => 'isAdminStaff'],function(){
+        Route::post('/store',[AddCLassController::class,'storeClass']);
+        Route::post('/update',[AddCLassController::class,'updateClass']);
+        Route::post('/delete',[AddCLassController::class,'deleteClass']);
+    });
 
 
     Route::apiResource('entities',EntityController::class);
+    Route::apiResource('departments',DepartmentController::class);
+    Route::apiResource('roles',RoleController::class)->only(['index']);
+    Route::apiResource('subjects',SubjectController::class);
+    Route::apiResource('section-year',SectionYearController::class);
 
 
     Route::post('/ratings',[RatingContoller::class,'store']);
 
-    Route::apiResource('departments',DepartmentController::class);
 
-    Route::apiResource('roles',RoleController::class)->only(['index']);
 
     Route::apiResource('users',UserController::class)->except(['show']);
     // Route::get('users/user-infos',[UserController::class,'getUserInfos']);
@@ -58,10 +67,7 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
     Route::get('/user-infos/delete',[UserInfoController::class,'showDetails']);
 
 
-    Route::apiResource('subjects',SubjectController::class);
 
-
-    Route::apiResource('section-year',SectionYearController::class);
 
     Route::get('/dashboard/admin',[DashboardController::class,'admin']);
     Route::get('/dashboard/user',[DashboardController::class,'user']);
