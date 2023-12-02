@@ -2,69 +2,58 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
+use Exception;
+use PDOException;
 use App\Models\Questionaire;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\Question;
+use App\Service\QuestionControllerService\QuestionService;
 
 class QuestionContoller extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Questionaire $questionaire)
+
+    public function __construct()
     {
-        // dd($id);
-        $questionaire 
-                                    ->with('criterias.questions')
-                                    ->first();
-        return view('questions.index',compact('questionaire'));
+        $this->authorizeResource(Question::class);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        try{
+            $result = (new QuestionService)->saveQuestion($request);
+            return $this->return_success($result);
+        }catch(PDOException $e){
+            return $this->return_error($e);
+        }catch(Exception $e){
+            return $this->return_error($e);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function update(Question $question,Request $request)
     {
-        //
+        try{
+            $result = (new QuestionService)->saveQuestion($question,$request);
+
+            return $this->return_success($result);
+        }catch(PDOException $e){
+            return $this->return_error($e);
+        }catch(Exception $e){
+            return $this->return_error($e);
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+
+    public function destroy(Question $question)
     {
-        //
+        try{
+            $question->delete();
+            return $this->return_success('Successfully deleted');
+        }catch(PDOException $e){
+            return $this->return_error($e);
+        }catch(Exception $e){
+            return $this->return_error($e);
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

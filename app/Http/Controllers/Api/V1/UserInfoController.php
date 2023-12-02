@@ -13,15 +13,10 @@ use Exception;
 
 class UserInfoController extends Controller
 {
-    // private $userId=null;
-    public function __construct()
-    {
-        $this->authorizeResource(UserInfo::class);
-    }
     public function showDetails(Request $request)
     {
         try{
-            $userInfo = (new UserInfoService($request))->getUserInfo();
+            $userInfo = (new UserInfoService)->getUserInfo($request);
             return $this->return_success($userInfo);
         }catch(PDOException $e){
             return $this->return_error($e);
@@ -33,9 +28,9 @@ class UserInfoController extends Controller
     public function store( UserInfoRequest $request)
     {
         try{
-            // $result = (new UserInfoService($request))->updateUserInfo();
-            // return $this->return_success($result);
-            return $this->return_success('test');
+            $result = (new UserInfoService)->updateUserInfo( $request);
+            return $this->return_success($result);
+            // return $this->return_success(auth()->user());
         }catch(PDOException $e){
             return $this->return_error($e);
         }catch(  Exception $e){
@@ -48,8 +43,10 @@ class UserInfoController extends Controller
 
     public function destroy(UserInfo $userInfo)
     {
+        $this->authorize('delete', $userInfo);
         try{
-
+            $userInfo->delete();
+            return $this->return_success('Successfully deleted');
         }catch(PDOException $e){
             return $this->return_error($e);
         }catch(  Exception $e){

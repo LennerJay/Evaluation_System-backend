@@ -16,7 +16,12 @@ class UserResource extends JsonResource
     {
         return [
             'id_number' => $this->id_number,
-            'department' => DepartmentResource::make($this->whenLoaded('department')),
+            'department' => $this->whenLoaded('sectionYearsPerUser',function(){
+                $departments = [];
+                foreach($this->sectionYearsPerUser as $syp){
+                    array_push($departments,);
+                }
+            }),
             'role' => new RoleResource($this->whenLoaded('role')),
             'infos' => new UserInfoResource($this->whenLoaded('userInfo')),
             'year_sections' => SectionYearResource::collection($this->whenLoaded('sectionYearsPerUser')),

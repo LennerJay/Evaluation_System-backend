@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\EntityResource;
 use App\Http\Requests\QuestionaireRequest;
 use App\Http\Resources\QuestionaireResource;
+use App\Service\QuestionaireControllerService\QuestionaireService;
 
 class QuestionaireContoller extends Controller
 {
@@ -30,16 +31,8 @@ class QuestionaireContoller extends Controller
     {
 
         try{
-            $questionaire =  Questionaire::create([
-                'title' => $request->title,
-                'description' => $request->description,
-                'semester' => $request->semester,
-                'school_year' => $request->school_year,
-                'max_respondents' => $request->max_respondents,
-                'status' =>$request->status
-               ]);
-                $questionaire->entities()->attach($request->entity_id);
-                return $this->return_success(QuestionaireResource::make($questionaire));
+            $result = (new QuestionaireService)->saveQuestionaire($request);
+            return $this->return_success(QuestionaireResource::make( $result));
         }catch(PDOException $e){
             return $this->return_error($e);
         }catch(Exception $e){
@@ -50,16 +43,10 @@ class QuestionaireContoller extends Controller
     public function update(Questionaire $questionaire,QuestionaireRequest $request)
     {
         try{
-            $questionaire->update([
-                'title'=>$request->title,
-                'description'=>$request->description,
-                'semester' =>$request->semester,
-                'school_year'=>$request->school_year,
-                'max_respondents'=>$request->max_respondents,
-                'status'=>$request->status
-            ]);
 
-            return $this->return_success(QuestionaireResource::make($questionaire));
+            $result = (new QuestionaireService)->updateQuestionaire($questionaire,$request);
+            return $this->return_success($result);
+
         }catch(PDOException $e){
             return $this->return_error($e);
         }catch(Exception $e){
@@ -114,43 +101,17 @@ class QuestionaireContoller extends Controller
 
     public function forEvaluatee(Request $request)
     {
-        $questionaire = cache()->remember(
-            'questionaire' . $request->entity_id,
-            now()->addDay(),
-            function() use ($request){
-                return Entity::with([
-                    'questionaires' =>function($q){
-                        $q->with([
-                            'criterias' => function($query){
-                                $query->with('questions');
-                            }
-                        ])
-                        ->where('status', true)
-                        ->latest('updated_at')
-                        ->first();
-                    }
-                ])
-                ->find($request->entity_id);
-            }
-        );
-
-        return new EntityResource($questionaire);
+        $result = (new QuestionaireService)->fetchForEvaluatee($request);
+        return $result;
 
     }
 
     public function latestQuestionaire()
     {
         try{
-            $questionaires = Questionaire::latest()
-                            ->with([
-                                    'criterias' => function($query){
-                                        $query->with('questions');
-                                    }
-                            ])
-                            ->get();
 
-            return $this->return_success(QuestionaireResource::collection($questionaires));
-
+            $result = (new QuestionaireService)->fetchLatestQuestionaire();
+            return $this->return_success($result);
         }catch(PDOException $e){
             return $this->return_error($e);
         }catch(Exception $e){
@@ -158,12 +119,11 @@ class QuestionaireContoller extends Controller
         }
     }
 
-    public function withCriterias(Request $request)
+    public function withCriterias(Questionaire $questionaire)
     {
-        try{
 
-            $questionaire = Questionaire::findOrFail($request->id);
-            return $this->return_success($questionaire->with('criterias')->get());
+        try{
+            return $this->return_success($questionaire->load('criterias'));
         }catch(PDOException $e){
             return $this->return_error($e);
         }catch(Exception $e){

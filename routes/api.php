@@ -3,30 +3,33 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\V1\CriteriaContoller;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\v1\UserController;
 use App\Http\Controllers\Api\V1\RatingContoller;
 use App\Http\Controllers\Api\v1\EntityController;
+use App\Http\Controllers\Api\V1\CriteriaContoller;
+use App\Http\Controllers\Api\V1\QuestionContoller;
+use App\Http\Controllers\Api\v1\SubjectController;
+use App\Http\Controllers\Api\v1\UserInfoController;
 use App\Http\Controllers\Api\v1\DashboardController;
 use App\Http\Controllers\Api\V1\EvaluateeController;
 use App\Http\Controllers\Api\v1\DepartmentController;
 use App\Http\Controllers\Api\V1\QuestionaireContoller;
 use App\Http\Controllers\Api\V1\SectionYearController;
-use App\Http\Controllers\Api\v1\SubjectController;
-use App\Http\Controllers\Api\v1\UserInfoController;
 
 Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
 
-    Route::get('/questionaires/with-criterias',[QuestionaireContoller::class,'withCriterias']);
+
     Route::post('/questionaires/for-evaluatee',[QuestionaireContoller::class,'forEvaluatee']);
     Route::get('/questionaires/latest-questionaire',[QuestionaireContoller::class,'latestQuestionaire']);
     Route::apiResource('questionaires',QuestionaireContoller::class);
     Route::patch('/questionaires/{questionaire}/update-status',[QuestionaireContoller::class,'updateStatus']);
+    Route::get('/questionaires/{questionaire}/with-criterias',[QuestionaireContoller::class,'withCriterias']);
 
-    // Route::get()
+    Route::apiResource('questions',QuestionContoller::class)->only('store','update','destroy');
+
     Route::apiResource('criterias',CriteriaContoller::class);
-    Route::get('/criterias/{criteria}/questions',[CriteriaContoller::class,'withQuestions']);
+    Route::get('/criterias/{criteria}/with-questions',[CriteriaContoller::class,'withQuestions']);
 
 
     Route::apiResource('evaluatees',EvaluateeController::class)->only(['index','store','destroy']);
@@ -52,6 +55,7 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
 
     Route::apiResource('user-infos',UserInfoController::class)->except(['index','show','update']);
     Route::get('/user-infos',[UserInfoController::class,'showDetails']);
+    Route::get('/user-infos/delete',[UserInfoController::class,'showDetails']);
 
 
     Route::apiResource('subjects',SubjectController::class);

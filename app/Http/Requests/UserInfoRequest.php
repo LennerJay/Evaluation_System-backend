@@ -22,13 +22,13 @@ class UserInfoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name'=>'required',
+            'first_name'=> 'required',
             'middle_name'=>'required',
             'last_name'=>'required',
-            'mobile_number'=>'required||integer|in:0,11',
+            'mobile_number'=>'required|integer',
             'course'=>'required',
-            'email'=>'required',
-            'regular'=>'required',
+            'email'=>'required|email',
+            'regular'=>'required|integer',
         ];
     }
 }

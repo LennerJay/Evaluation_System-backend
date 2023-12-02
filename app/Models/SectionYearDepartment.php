@@ -40,7 +40,9 @@ class SectionYearDepartment extends Model
 
     public function klasses():BelongsToMany
     {
-        return $this->belongsToMany(Klass::class,'klass_sections','s_y_id','klass_id')->withTimestamps();
+        return $this->belongsToMany(Klass::class,'klass_sections','s_y_d_id','klass_id')
+        ->withPivot('time','day')
+        ->withTimestamps();
     }
 
     public function users():BelongsToMany

@@ -27,7 +27,7 @@ class CriteriaContoller extends Controller
     public function withQuestions(Criteria $criteria)
     {
         try{
-            return $this->return_success($criteria->with('questions')->get());
+            return $this->return_success($criteria->load('questions'));
         }catch(PDOException $e){
             return $this->return_error($e);
         }catch(Exception $e){

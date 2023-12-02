@@ -2,60 +2,62 @@
 
 namespace App\Service\UserInfoControllerService;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Models\UserInfo;
 
 class UserInfoService{
 
-    private $userId = null;
-    private $request = null;
-
-
-    public function __construct( $request)
+    public function getUserInfo($request)
     {
-        $validatedData = $request->validate([
-            'id_number' => 'numeric|integer|nullable',
-        ]);
-
-        if($validatedData){
-           $this->userId = $validatedData;
-
-        }else{
-            $this->userId = auth()->user()->id_number;
+        $userid = null;
+        if($request->id_number){
+            $userid = $request->id_number;
         }
-        $this->request = $request;
-    }
-
-    public function getUserInfo()
-    {
-
+        else{
+            $userid = auth()->user()->id_number;
+        }
         $userInfo = User::with([
             'userInfo',
             'sectionYearDepartment' => function($q){
-                $q->with(['department','sectionYear']);
+                $q->with([
+                    'department',
+                    'sectionYear',
+                    'klasses' =>function($q){
+                        $q->with([
+                            'subject',
+                            'evaluateeDepartment'=>function($q){
+                                $q->with([
+                                    'department',
+                                    'evaluatee'
+                                ]);
+                            }
+                        ]);
+                    }
+                ]);
             }
-            ])->findOrfail( $this->userId);
+            ])->findOrfail($userid );
 
-            return $userInfo ;
+            // return UserResource::make($userInfo) ;
+            return$userInfo ;
     }
 
 
-    public function updateUserInfo()
+    public function updateUserInfo($request)
     {
         $user = UserInfo::firstOrCreate([
-            'user_id' => $this->userId
+            'user_id' => $request['id_number']
         ]);
 
-        $user->first_name= $this->request['first_name'];
-        $user->middle_name= $this->request['middle_name'];
-        $user->last_name= $this->request['last_name'];
-        $user->mobile_number= $this->request['mobile_number'];
-        $user->course= $this->request['course'];
-        $user->email= $this->request['email'];
-        $user->regular= $this->request['regular'];
+        $user->first_name= $request['first_name'];
+        $user->middle_name= $request['middle_name'];
+        $user->last_name= $request['last_name'];
+        $user->mobile_number= $request['mobile_number'];
+        $user->course= $request['course'];
+        $user->email= $request['email'];
+        $user->regular= $request['regular'];
         $user->save();
-
         return $user;
-    }
 
+    }
 }

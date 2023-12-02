@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 class Question extends Model
 {
     use HasFactory;
-    protected $fillable = ['question'];
+    protected $fillable = ['question','criteria_id'];
 
     protected $hidden = ['updated_at', 'created_at'];
 
