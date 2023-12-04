@@ -23,22 +23,22 @@ class DepartmentSeeder extends Seeder
                 Department::create(['name'=> $deparmentData]);
             }
 
-        $roleForStudent = Role::where('name','student')->first();
-        $deparments = Department::all();
-        $sys = SectionYear::all();
+        // $roleForStudent = Role::where('name','student')->first();
+        // $deparments = Department::all();
+        // $sys = SectionYear::all();
 
-        foreach($deparments as $deparment){
-            foreach($sys as $sy){
-                $sydId = sectionYearDepartment::create([
-                    'department_id'=>$deparment->id,
-                    'section_year_id'=>$sy->id
-                ]);
-                User::factory(30)->create(['role_id'=>$roleForStudent])->each(function($user)use($sydId){
-                    UserInfo::factory()->create(['user_id'=>$user->id_number]);
-                    $user->sectionYearDepartment()->attach($sydId);
-                });
-            }
-        }
+        // foreach($deparments as $deparment){
+        //     foreach($sys as $sy){
+        //         $sydId = sectionYearDepartment::create([
+        //             'department_id'=>$deparment->id,
+        //             'section_year_id'=>$sy->id
+        //         ]);
+        //         User::factory(30)->create(['role_id'=>$roleForStudent])->each(function($user)use($sydId){
+        //             UserInfo::factory()->create(['user_id'=>$user->id_number]);
+        //             $user->sectionYearDepartment()->attach($sydId);
+        //         });
+        //     }
+        // }
 
 
 

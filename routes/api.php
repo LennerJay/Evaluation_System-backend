@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\v1\AddCLassController;
+use App\Http\Controllers\Api\v1\ClassController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\v1\UserController;
 use App\Http\Controllers\Api\V1\RatingContoller;
@@ -39,9 +39,9 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
     Route::post('evaluatees/evaluatees-to-rate',[EvaluateeController::class,'getEvaluateesToRate']);
 
     Route::group(['prefix' => 'class','middleware' => 'isAdminStaff'],function(){
-        Route::post('/store',[AddCLassController::class,'storeClass']);
-        Route::post('/update',[AddCLassController::class,'updateClass']);
-        Route::post('/delete',[AddCLassController::class,'deleteClass']);
+        Route::post('/store',[ClassController::class,'storeClass']);
+        Route::post('/update',[ClassController::class,'updateClass']);
+        Route::post('/delete',[ClassController::class,'deleteClass']);
     });
 
 
@@ -59,8 +59,10 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
     Route::apiResource('users',UserController::class)->except(['show']);
     // Route::get('users/user-infos',[UserController::class,'getUserInfos']);
     Route::get('users/user',[UserController::class,'getUser']);
+    Route::get('users/evaluatees-to-rate',[UserController::class,'getEvaluateesToRate']);
     Route::post('users/change-password',[UserController::class,'changePassword']);
     Route::patch('users/{user}/reset-password',[UserController::class,'resetPassword']);
+
 
     Route::apiResource('user-infos',UserInfoController::class)->except(['index','show','update']);
     Route::get('/user-infos',[UserInfoController::class,'showDetails']);

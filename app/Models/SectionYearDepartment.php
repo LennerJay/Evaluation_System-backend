@@ -4,9 +4,10 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Klass;
+use App\Models\Evaluatee;
 use App\Models\Department;
 use App\Models\SectionYear;
-use App\Models\klassSection;
+use App\Models\KlassDetails;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -33,16 +34,14 @@ class SectionYearDepartment extends Model
         return $this->belongsTo(SectionYear::class);
     }
 
-    public function klassSections():HasMany
+    public function evaluatees():BelongsToMany
     {
-        return $this->hasMany(klassSection::class);
+        return $this->belongsToMany(Evaluatee::class,'klass_details','s_y_d_id','evaluatee_id');
     }
 
-    public function klasses():BelongsToMany
+    public function KlassDetails():HasMany
     {
-        return $this->belongsToMany(Klass::class,'klass_sections','s_y_d_id','klass_id')
-        ->withPivot('time','day')
-        ->withTimestamps();
+        return $this->hasMany(KlassDetails::class,'s_y_d_id','id');
     }
 
     public function users():BelongsToMany

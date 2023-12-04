@@ -116,10 +116,15 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
-    public function getEvaluateesToRate(User $user){
-        $evaluatees = $user->evaluatees()->with(['roles','departments'])->get();
-        // return response()->json( $evaluatees);
-        return EvaluateeResource::collection($evaluatees);
+    public function getEvaluateesToRate(){
+        try{
+            $result = collect((new UserService)->fetchEvaluateesToRate());
+            return $this->return_success($result);
+        }catch(PDOException $e){
+            return $this->return_error($e);
+        }catch(Exception $e){
+            return $this->return_error($e);
+        }
     }
 
     public function resetPassword(User $user)

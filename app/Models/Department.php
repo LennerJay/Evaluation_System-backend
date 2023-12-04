@@ -27,13 +27,8 @@ class Department extends Model
 
     public function evaluatees():BelongsToMany
     {
-        return $this->belongsToMany(Evaluatee::class,'evaluatee_departments','department_id','evaluatee_id')
+        return $this->belongsToMany(Evaluatee::class,'section_year_departments','department_id','evaluatee_id')
                      ->withTimestamps();;
-    }
-
-    public function evaluateeDepartments():HasMany
-    {
-        return $this->hasMany(EvaluateeDepartment::class);
     }
 
     public function sectionYearDepartments():HasMany

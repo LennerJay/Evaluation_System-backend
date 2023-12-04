@@ -3,38 +3,40 @@ namespace App\Service\EvaluateeControllerService;
 
 use App\Models\Evaluatee;
 use App\Http\Resources\EvaluateeResource;
-
+use App\Models\Entity;
+use App\Models\KlassDetails;
 
 class EvaluateeService{
 
     public function fetchEvaluateInfo($id){
         $evaluatee = Evaluatee::with([
-            'evaluateeDepartments' =>function($query){
-                $query->with('department')
-                      ->with([
-                        'klasses'=>function($q){
-                            $q->with([
-                                'subject',
-                                'sectionYearDepartment'
-                                => function($q){
-                                    $q->with('sectionYear');
-                                }
-                            ]);
-                        }
-                      ]);
-                ;
-            },
             'entity',
+            'KlassDetails' => function($q){
+                $q->with([
+                    'subject',
+                    'sectionYearDepartment'=>function($q){
+                        $q->with(['sectionYear','department']);
+                    },
+                ]);
+            }
             ])
             ->findOrFail($id);
-
-        return $evaluatee;
+            // return $evaluatee;
+            return  EvaluateeResource::make($evaluatee);
     }
 
     public function fetchAllEvaluatees()
     {
+
         $evaluatees = Evaluatee::with([
-            'departments','entity'])->latest()->get();
+                                'entity',
+                                'SectionYearDepartments' =>function($q){
+                                    $q->with([
+                                        'department',
+                                    ]);
+                                }
+                                ])
+                                ->latest()->get();
         return  EvaluateeResource::collection($evaluatees);
     }
 
@@ -59,6 +61,8 @@ class EvaluateeService{
         return $evaluatee;
 
     }
+
+
 
 
 }

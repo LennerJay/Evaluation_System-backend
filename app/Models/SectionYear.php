@@ -19,15 +19,19 @@ class SectionYear extends Model
 
     protected $hidden = ['updated_at', 'created_at'];
 
-    public function departments():BelongsToMany
-    {
-        return $this->belongsToMany(Department::class,'section_year_departments','section_year_id','department_id')
-                    ->withTimestamps();;
-    }
-
     public function sectionYearDepartments():HasMany
     {
         return $this->hasMany(SectionYearDepartment::class,'section_year_id','id');
     }
 
+    public function departments():BelongsToMany
+    {
+        return $this->belongsToMany(Department::class,'section_year_departments','section_year_id','department_id')
+                    ->withTimestamps();
+    }
+
+    public function evaluatees():BelongsToMany
+    {
+        return $this->belongsToMany(Evaluatee::class,'section_year_departments','section_year_id','evaluatee_id')->withTimestamps();
+    }
 }

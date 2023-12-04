@@ -1,14 +1,13 @@
 <?php
 namespace App\Service\UserControllerService;
 
-use App\Http\Resources\SectionYearDepartmentResource;
+use App\Http\Resources\EvaluateeResource;
 use App\Models\User;
+use App\Models\Entity;
+use App\Models\Evaluatee;
 use App\Http\Resources\UserResource;
-use App\Models\Role;
-use App\Models\SectionYear;
-use App\Models\SectionYearDepartment;
 use Illuminate\Support\Facades\Hash;
-use PDO;
+use App\Models\SectionYearDepartment;
 
 class UserService{
 
@@ -71,6 +70,40 @@ class UserService{
         $user->password = Hash::make($request['password']);
         $user->save();
         return 'password change successful';
+    }
+
+    public function fetchEvaluateesToRate()
+    {
+
+        $instructor = Entity::where('entity_name','instructor')->first();
+        $evaluatees = Evaluatee::with('entity')->where('entity_id','!=',$instructor->id)
+                                ->get();
+
+        $evaluateeDatas = EvaluateeResource::collection($evaluatees);
+        $user = User::with([
+                            'sectionYearDepartments' =>function($q){
+                                $q->with([
+                                    'evaluatees' =>function($q){
+                                            $q->with('entity')->distinct();
+                                        }
+                                ]);
+                            }
+                    ])
+                    ->find(auth()->user()->id_number);
+
+        $userDatas =  EvaluateeResource::collection($user->sectionYearDepartments[0]->evaluatees);
+        $response = [... $userDatas,...$evaluateeDatas];
+        return $response;
+
+    }
+
+    public function fetchAllEvaluateesExceptInstructor()
+    {
+        $instructor = Entity::where('entity_name','instructor')->first();
+        $evaluatees = Evaluatee::with('entity')->where('entity_id','!=',$instructor->id)->get();
+
+        // return $evaluatees ;
+        return EvaluateeResource::collection($evaluatees);
     }
 
 }

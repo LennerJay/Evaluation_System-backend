@@ -23,41 +23,41 @@ class SubjectSeeder extends Seeder
         }
 
 
-        $departments = Department::all();
-        $instructorId = Entity::where('entity_name','instructor')->first();
+        // $departments = Department::all();
+        // $instructorId = Entity::where('entity_name','instructor')->first();
 
-        foreach($departments as $department){
-            Evaluatee::factory(10)->create(['entity_id'=>$instructorId])->each(function($evaluatee)use($department){
-               $eD= EvaluateeDepartment::create([
-                    'evaluatee_id' => $evaluatee->id,
-                    'department_id' => $department->id
-                ]);
-                $randomSubjects = Subject::inRandomOrder()->take(3)->get();
-                foreach ($randomSubjects as $subject){
-                    Klass::create([
-                        'subject_id' => $subject->id,
-                        'e_d_id'=> $eD->id
-                    ]);
-                }
+        // foreach($departments as $department){
+        //     Evaluatee::factory(10)->create(['entity_id'=>$instructorId])->each(function($evaluatee)use($department){
+        //        $eD= EvaluateeDepartment::create([
+        //             'evaluatee_id' => $evaluatee->id,
+        //             'department_id' => $department->id
+        //         ]);
+        //         $randomSubjects = Subject::inRandomOrder()->take(3)->get();
+        //         foreach ($randomSubjects as $subject){
+        //             Klass::create([
+        //                 'subject_id' => $subject->id,
+        //                 'e_d_id'=> $eD->id
+        //             ]);
+        //         }
 
-            });
-        }
+        //     });
+        // }
 
-        Evaluatee::factory(10)->create(['entity_id'=>$instructorId])->each(function($evaluatee){
-            $randomDepartments = Department::inRandomOrder()->take(2)->get();
-            foreach($randomDepartments as $department){
-                $eD= EvaluateeDepartment::create([
-                    'evaluatee_id' => $evaluatee->id,
-                    'department_id' => $department->id
-                ]);
-                $randomSubjects = Subject::inRandomOrder()->take(1)->get();
-                foreach ($randomSubjects as $subject){
-                    Klass::create([
-                        'subject_id' => $subject->id,
-                        'e_d_id'=> $eD->id
-                    ]);
-                }
-            }
-        });
+        // Evaluatee::factory(10)->create(['entity_id'=>$instructorId])->each(function($evaluatee){
+        //     $randomDepartments = Department::inRandomOrder()->take(2)->get();
+        //     foreach($randomDepartments as $department){
+        //         $eD= EvaluateeDepartment::create([
+        //             'evaluatee_id' => $evaluatee->id,
+        //             'department_id' => $department->id
+        //         ]);
+        //         $randomSubjects = Subject::inRandomOrder()->take(1)->get();
+        //         foreach ($randomSubjects as $subject){
+        //             Klass::create([
+        //                 'subject_id' => $subject->id,
+        //                 'e_d_id'=> $eD->id
+        //             ]);
+        //         }
+        //     }
+        // });
     }
 }

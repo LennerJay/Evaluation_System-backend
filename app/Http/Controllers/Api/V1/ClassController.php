@@ -6,15 +6,16 @@ use Exception;
 use PDOException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Service\ClassControllerService\ClassService;
 
-class AddCLassController extends Controller
+class ClassController extends Controller
 {
-
-    public function storeClass()
+    public function storeClass(Request $request)
     {
         try{
 
-            return $this->return_success('test');
+            $result = (new ClassService)->saveClass($request);
+            return $this->return_success($result);
         }catch(PDOException $e){
             return $this->return_error($e->getMessage());
         }catch(Exception $e){
@@ -45,6 +46,4 @@ class AddCLassController extends Controller
             return $this->return_error($e->getMessage());
         }
     }
-
-
 }

@@ -86,7 +86,7 @@ class User extends Authenticatable
         return $this->BelongsTo(Role::class);
     }
 
-    public function sectionYearDepartment():BelongsToMany
+    public function sectionYearDepartments():BelongsToMany
     {
         return $this->belongsToMany(SectionYearDepartment::class,'section_per_users','user_id','s_y_d_id','id_number','id')
                     ->withTimestamps();

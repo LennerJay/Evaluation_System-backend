@@ -23,9 +23,9 @@ class EvaluateeController extends Controller
             $result = (new EvaluateeService)->fetchAllEvaluatees();
             return $this->return_success( $result);
         }catch(PDOException $e){
-            return $this->return_error($e);
+            return $this->return_error($e->getMessage());
         }catch(Exception $e){
-            return $this->return_error($e);
+            return $this->return_error($e->getMessage());
         }
     }
 
@@ -43,9 +43,9 @@ class EvaluateeController extends Controller
             $result = (new EvaluateeService)->saveEvaluatees($request);
             return $this->return_success($result);
         }catch(PDOException $e){
-            return $this->return_error($e);
+            return $this->return_error($e->getMessage());
         }catch(Exception $e){
-            return $this->return_error($e);
+            return $this->return_error($e->getMessage());
         }
 
 
@@ -98,9 +98,9 @@ class EvaluateeController extends Controller
             $result = (new EvaluateeService)->updateEvaluatee( $evaluatee, $request );
             return $this->return_success($result);
         }catch(PDOException $e){
-            return $this->return_error($e);
+            return $this->return_error($e->getMessage());
         }catch(Exception $e){
-            return $this->return_error($e);
+            return $this->return_error($e->getMessage());
         }
     }
 
@@ -114,9 +114,9 @@ class EvaluateeController extends Controller
             $evaluatee->delete();
             return $this->return_success("Delete Successfully");
         }catch(PDOException $e){
-            return $this->return_error($e);
+            return $this->return_error($e->getMessage());
         }catch(Exception $e){
-            return $this->return_error($e);
+            return $this->return_error($e->getMessage());
         }
     }
 

@@ -19,27 +19,17 @@ class UserInfoService{
         }
         $userInfo = User::with([
             'userInfo',
-            'sectionYearDepartment' => function($q){
+            'sectionYearDepartments' => function($q){
                 $q->with([
                     'department',
                     'sectionYear',
-                    'klasses' =>function($q){
-                        $q->with([
-                            'subject',
-                            'evaluateeDepartment'=>function($q){
-                                $q->with([
-                                    'department',
-                                    'evaluatee'
-                                ]);
-                            }
-                        ]);
-                    }
+                    'KlassDetails'
                 ]);
             }
             ])->findOrfail($userid );
 
             // return UserResource::make($userInfo) ;
-            return$userInfo ;
+            return $userInfo ;
     }
 
 

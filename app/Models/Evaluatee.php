@@ -8,7 +8,10 @@ use App\Models\Entity;
 use App\Models\Rating;
 use App\Models\Subject;
 use App\Models\Department;
+use App\Models\SectionYear;
+use App\Models\KlassDetails;
 use App\Models\EvaluateeDepartment;
+use App\Models\SectionYearDepartment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,7 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Evaluatee extends Model
 {
     use HasFactory;
-
+    protected $hidden = ['created_at','updated_at','pivot'];
     protected $fillable = [
         'name',
         'entity_id',
@@ -29,14 +32,22 @@ class Evaluatee extends Model
     {
         return $this->hasMany(Rating::class);
     }
-    public function klasses(): HasMany
+
+    public function KlassDetails(): HasMany
     {
-        return $this->hasMany(Klass::class);
+        return $this->hasMany(KlassDetails::class);
     }
 
-    public function evaluateeDepartments():HasMany
+    public function SectionYearDepartments(): BelongsToMany
     {
-        return $this->hasMany(EvaluateeDepartment::class);
+        return $this->belongsToMany(SectionYearDepartment::class,'klass_details','evaluatee_id','s_y_d_id','id','id')
+                    ->withPivot(['time','day'])
+                    ->withTimestamps();
+    }
+
+    public function subjects(): BelongsToMany
+    {
+        return $this->belongsToMany(Subject::class,'klass_details','evaluatee_id','subject_id');
     }
 
     public function users(): BelongsToMany
@@ -46,16 +57,10 @@ class Evaluatee extends Model
                     ->withTimestamps();
     }
 
-    public function departments():BelongsToMany
-    {
-        return $this->belongsToMany(Department::class,'evaluatee_departments','evaluatee_id','department_id')
-                    ->withTimestamps();
-    }
-
-
     public function entity():BelongsTo
     {
         return $this->belongsTo(Entity::class);
     }
+
 
 }
