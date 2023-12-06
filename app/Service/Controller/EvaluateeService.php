@@ -1,10 +1,9 @@
 <?php
-namespace App\Service\EvaluateeControllerService;
+namespace App\Service\Controller;
 
 use App\Models\Evaluatee;
 use App\Http\Resources\EvaluateeResource;
-use App\Models\Entity;
-use App\Models\KlassDetails;
+
 
 class EvaluateeService{
 

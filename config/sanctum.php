@@ -46,6 +46,8 @@ return [
     |
     */
 
+    // 'expiration' => 1440,
+    // 'expiration' => 1,
     'expiration' => null,
 
     /*

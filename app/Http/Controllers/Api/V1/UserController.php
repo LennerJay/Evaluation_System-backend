@@ -5,17 +5,11 @@ namespace App\Http\Controllers\Api\v1;
 use Exception;
 use PDOException;
 use App\Models\User;
-use App\Models\Klass;
-use App\Models\UserInfo;
-use App\Models\SectionYear;
-use App\Models\KlassSection;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
-use App\Http\Resources\EvaluateeResource;
-use App\Service\UserControllerService\UserService;
-use Illuminate\Auth\Access\Gate;
-use Illuminate\Support\Facades\Hash;
+use App\Service\Controller\UserService;
+
 
 class UserController extends Controller
 {

@@ -40,8 +40,8 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
 
     Route::group(['prefix' => 'class','middleware' => 'isAdminStaff'],function(){
         Route::post('/store',[ClassController::class,'storeClass']);
-        Route::post('/update',[ClassController::class,'updateClass']);
-        Route::post('/delete',[ClassController::class,'deleteClass']);
+        Route::patch('/update',[ClassController::class,'updateClass']);
+        Route::delete('/delete',[ClassController::class,'deleteClass']);
     });
 
 
@@ -66,7 +66,7 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
 
     Route::apiResource('user-infos',UserInfoController::class)->except(['index','show','update']);
     Route::get('/user-infos',[UserInfoController::class,'showDetails']);
-    Route::get('/user-infos/delete',[UserInfoController::class,'showDetails']);
+    // Route::get('/user-infos/delete',[UserInfoController::class,'showDetails']);
 
 
 

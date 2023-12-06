@@ -4,18 +4,18 @@ namespace App\Http\Controllers\Api\v1;
 
 use Exception;
 use PDOException;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Service\ClassControllerService\ClassService;
+use App\Http\Requests\KlassDetailRequest;
+use App\Service\Controller\ClassService;
+use Illuminate\Http\Request;
 
 class ClassController extends Controller
 {
-    public function storeClass(Request $request)
+    public function storeClass(KlassDetailRequest $request)
     {
         try{
-
             $result = (new ClassService)->saveClass($request);
-            return $this->return_success($result);
+            return $this->return_success( $result);
         }catch(PDOException $e){
             return $this->return_error($e->getMessage());
         }catch(Exception $e){
@@ -23,10 +23,14 @@ class ClassController extends Controller
         }
     }
 
-    public function updateClass()
+    public function updateClass(Request $request)
     {
+        $validated = $request->validate([
+            'day' => 'required',
+            'time' => 'required'
+        ]);
         try{
-
+            $result = (new ClassService)->updateClass($validated);
             return $this->return_success('test');
         }catch(PDOException $e){
             return $this->return_error($e->getMessage());
@@ -35,11 +39,11 @@ class ClassController extends Controller
         }
     }
 
-    function deleteClass()
+    function deleteClass(Request $request)
     {
         try{
-
-            return $this->return_success('test');
+            $result = (new ClassService)->deleteClass($request);
+            return $this->return_success( $result);
         }catch(PDOException $e){
             return $this->return_error($e->getMessage());
         }catch(Exception $e){

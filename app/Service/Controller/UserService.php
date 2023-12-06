@@ -1,5 +1,5 @@
 <?php
-namespace App\Service\UserControllerService;
+namespace App\Service\Controller;
 
 use App\Http\Resources\EvaluateeResource;
 use App\Models\User;
@@ -18,9 +18,12 @@ class UserService{
             'AllUsers',
             3600,
             function () {
-            return  User::with(['role'])->get();
+            return  User::with([
+                'role',
+                'sectionYearDepartments' => fn($q) => $q->with(['department','sectionYear'])
+                ])
+                ->latest()->get();
         });
-
       return  UserResource::collection($users);
     }
 
@@ -97,13 +100,5 @@ class UserService{
 
     }
 
-    public function fetchAllEvaluateesExceptInstructor()
-    {
-        $instructor = Entity::where('entity_name','instructor')->first();
-        $evaluatees = Evaluatee::with('entity')->where('entity_id','!=',$instructor->id)->get();
-
-        // return $evaluatees ;
-        return EvaluateeResource::collection($evaluatees);
-    }
 
 }

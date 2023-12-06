@@ -14,6 +14,14 @@ class KlassDetails extends Model
 {
     use HasFactory;
 
+    protected $fillable=[
+        's_y_d_id',
+        'subject_id',
+        'evaluatee_id',
+        'time',
+        'day',
+    ];
+
     protected $hidden = ['created_at','updated_at'];
 
     public function sectionYearDepartment():BelongsTo

@@ -1,5 +1,5 @@
 <?php
-namespace App\Service\QuestionControllerService;
+namespace App\Service\Controller;
 
 use App\Models\Question;
 

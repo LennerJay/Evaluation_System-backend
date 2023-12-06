@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('evaluatee_id')->nullable()->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->string('time');
             $table->string('day');
+            $table->unique(['s_y_d_id','subject_id','evaluatee_id']);
             $table->timestamps();
         });
     }

@@ -7,7 +7,7 @@ use App\Models\UserInfo;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserInfoRequest;
-use App\Service\UserInfoControllerService\UserInfoService;
+use App\Service\Controller\UserInfoService;
 use Exception;
 
 class UserInfoController extends Controller
@@ -51,8 +51,6 @@ class UserInfoController extends Controller
             return $this->return_error($e);
         }
     }
-
-
 
 
 }

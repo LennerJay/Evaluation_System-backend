@@ -4,7 +4,6 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use stdClass;
 
 class UserResource extends JsonResource
 {
@@ -17,34 +16,27 @@ class UserResource extends JsonResource
     {
         return [
             'id_number' => $this->id_number,
-            'department' => $this->whenLoaded('sectionYearsPerUser',function(){
-                $departments = [];
-                foreach($this->sectionYearsPerUser as $syp){
-                    array_push($departments,);
-                }
+            'role_name' => $this->whenLoaded('role',function(){
+                return $this->role->name;
             }),
-            'role' => new RoleResource($this->whenLoaded('role')),
             'infos' => new UserInfoResource($this->whenLoaded('userInfo')),
-            // 'year_sections' => SectionYearResource::collection($this->whenLoaded('sectionYearsPerUser')),
-            'instructors' => $this->whenLoaded('sectionYearDepartments',function(){
-                $instructors = [];
+            'departments' => $this->whenLoaded('sectionYearDepartments',function(){
+                $departments = [];
+
                 foreach($this->sectionYearDepartments as $syd){
-                    foreach($syd->evaluatees as $evaluatee){
-                        $instructor = new stdClass;
-                        // if(!in_array($evaluatee->name,$instructors)){
-
-                        // }
-                        $instructor->id = $evaluatee->id;
-                        $instructor->name =  $evaluatee->name;
-                        $instructor->name =  $evaluatee->name;
-                        $instructor->job_type =  $evaluatee->job_type;
-
-                        array_push($instructors, $instructor);
-                    }
+                    array_push($departments,$syd->department->name);
                 }
-                return  $instructors;
-            }),
 
+                return $departments;
+            }),
+            'year_section' => $this->whenLoaded('sectionYearDepartments',function(){
+                $yearSections = [];
+                foreach($this->sectionYearDepartments as $syd){
+                    array_push($yearSections,$syd->sectionYear->s_y);
+                }
+
+                return $yearSections;
+             }),
 
         ];
     }

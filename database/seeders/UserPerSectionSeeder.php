@@ -34,9 +34,30 @@ class UserPerSectionSeeder extends Seeder
                 });
                 // $userIds = $users->pluck('id_number');
                 // $syd->users()->attach($userIds);
+            }
+
+        }
+
+
+        User::factory(10)->create([
+            'role_id' => $studentRole->id
+        ])->each(function ($user) use($syd){
+            UserInfo::factory()->create(['user_id' => $user->id_number]);
+            $randomDeparments = Department::inRandomOrder()->take(2)->get();
+            $randomSYs = SectionYear::inRandomOrder()->take(2)->get();
+            foreach( $randomDeparments as $department){
+                foreach($randomSYs as $sy){
+                 $syd =  SectionYearDepartment::where('section_year_id', $sy->id)
+                                                ->where('department_id',$department->id)
+                                                ->first();
+                    $user->sectionYearDepartments()->attach($syd->id);
+                }
 
             }
-        }
+
+        });
+
+
 
     }
 }

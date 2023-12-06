@@ -1,5 +1,5 @@
 <?php
-namespace App\Service\QuestionaireControllerService;
+namespace App\Service\Controller;
 
 use App\Models\Entity;
 use App\Models\Questionaire;
@@ -41,27 +41,42 @@ use App\Http\Resources\QuestionaireResource;
 
     public function fetchForEvaluatee($request)
     {
-        $questionaire = cache()->remember(
-            'questionaire' . $request->entity_id,
-            now()->addDay(),
-            function() use ($request){
-                return Entity::with([
-                    'questionaires' =>function($q){
-                        $q->with([
-                            'criterias' => function($query){
-                                $query->with('questions');
-                            }
-                        ])
-                        ->where('status', true)
-                        ->latest('updated_at')
-                        ->first();
+        // $questionaire = cache()->remember(
+        //     'questionaire' . $request->entity_id,
+        //     now()->addDay(),
+        //     function() use ($request){
+        //         return Entity::with([
+        //             'questionaires' =>function($q){
+        //                 $q->with([
+        //                     'criterias' => function($query){
+        //                         $query->with('questions');
+        //                     }
+        //                 ])
+        //                 ->where('status', true)
+        //                 ->latest('updated_at')
+        //                 ->first();
+        //             }
+        //         ])
+        //         ->find($request->entity_id);
+        //     }
+        // );
+       $questionaire = Entity::with([
+            'questionaires' =>function($q){
+                $q->with([
+                    'criterias' => function($query){
+                        $query->with('questions');
                     }
                 ])
-                ->find($request->entity_id);
+                ->where('status', true)
+                ->latest('updated_at')
+                ->first();
             }
-        );
+        ])
+        ->find($request->entity_id);
+        // $entity = Entity::with('questionaires')->findOrfail($request->entity_id);
+        // return new EntityResource($questionaire);
+        return $questionaire;
 
-        return new EntityResource($questionaire);
     }
 
     public function fetchLatestQuestionaire()

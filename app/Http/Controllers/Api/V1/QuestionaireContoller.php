@@ -4,14 +4,12 @@ namespace App\Http\Controllers\Api\V1;
 
 use Exception;
 use PDOException;
-use App\Models\Entity;
 use App\Models\Questionaire;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\EntityResource;
 use App\Http\Requests\QuestionaireRequest;
 use App\Http\Resources\QuestionaireResource;
-use App\Service\QuestionaireControllerService\QuestionaireService;
+use App\Service\Controller\QuestionaireService;
 
 class QuestionaireContoller extends Controller
 {
@@ -48,9 +46,9 @@ class QuestionaireContoller extends Controller
             return $this->return_success($result);
 
         }catch(PDOException $e){
-            return $this->return_error($e);
+            return $this->return_error($e->getMessage());
         }catch(Exception $e){
-            return $this->return_error($e);
+            return $this->return_error($e->getMessage());
         }
     }
 
@@ -60,9 +58,9 @@ class QuestionaireContoller extends Controller
             $questionaire->delete();
             return $this->return_success('Successfully deleted');
         }catch(PDOException $e){
-            return $this->return_error($e);
+            return $this->return_error($e->getMessage());
         }catch(Exception $e){
-            return $this->return_error($e);
+            return $this->return_error($e->getMessage());
         }
 
 
@@ -93,17 +91,22 @@ class QuestionaireContoller extends Controller
             $questionaire->save();
             return $this->return_success($questionaire);
         }catch(PDOException $e){
-            return $this->return_error($e);
+            return $this->return_error($e->getMessage());
         }catch(Exception $e){
-            return $this->return_error($e);
+            return $this->return_error($e->getMessage());
         }
     }
 
     public function forEvaluatee(Request $request)
     {
-        $result = (new QuestionaireService)->fetchForEvaluatee($request);
-        return $result;
-
+        try{
+            $result = (new QuestionaireService)->fetchForEvaluatee($request);
+            return $this->return_success($result);
+        }catch(PDOException $e){
+            return $this->return_error($e->getMessage());
+        }catch(Exception $e){
+            return $this->return_error($e->getMessage());
+        }
     }
 
     public function latestQuestionaire()
@@ -113,9 +116,9 @@ class QuestionaireContoller extends Controller
             $result = (new QuestionaireService)->fetchLatestQuestionaire();
             return $this->return_success($result);
         }catch(PDOException $e){
-            return $this->return_error($e);
+            return $this->return_error($e->getMessage());
         }catch(Exception $e){
-            return $this->return_error($e);
+            return $this->return_error($e->getMessage());
         }
     }
 
@@ -125,9 +128,9 @@ class QuestionaireContoller extends Controller
         try{
             return $this->return_success($questionaire->load('criterias'));
         }catch(PDOException $e){
-            return $this->return_error($e);
+            return $this->return_error($e->getMessage());
         }catch(Exception $e){
-            return $this->return_error($e);
+            return $this->return_error($e->getMessage());
         }
     }
 }

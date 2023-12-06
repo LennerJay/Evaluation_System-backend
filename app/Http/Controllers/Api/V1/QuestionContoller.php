@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Api\V1;
 
 use Exception;
 use PDOException;
-use App\Models\Questionaire;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Question;
-use App\Service\QuestionControllerService\QuestionService;
+use App\Service\Controller\QuestionService;
 
 class QuestionContoller extends Controller
 {
@@ -33,7 +32,7 @@ class QuestionContoller extends Controller
     public function update(Question $question,Request $request)
     {
         try{
-            $result = (new QuestionService)->saveQuestion($question,$request);
+            $result = (new QuestionService)->updateQuestion($question,$request);
 
             return $this->return_success($result);
         }catch(PDOException $e){

@@ -23,7 +23,6 @@ class UserInfoFactory extends Factory
             'course'=>  fake()->randomElement(['BSIT','BEED','BSHRM']),
             'email' => fake()->unique()->safeEmail(),
             'mobile_number' => fake()->numerify('###########'),
-            'regular' => fake()->randomElement([0,1]),
         ];
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\V1;
 
 use Exception;
-use Throwable;
 use PDOException;
 use App\Models\User;
 use App\Models\Evaluatee;
@@ -13,7 +12,7 @@ use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\EvaluateeRequest;
 use App\Http\Resources\EvaluateeResource;
-use App\Service\EvaluateeControllerService\EvaluateeService;
+use App\Service\Controller\EvaluateeService;
 
 class EvaluateeController extends Controller
 {
@@ -122,10 +121,16 @@ class EvaluateeController extends Controller
 
     public function evaluateeInfo(Request $request)
     {
+        try{
 
-        $res =(new EvaluateeService)->fetchEvaluateInfo($request->evaluatee_id);
-        // return response()->json( $res);
-        return new EvaluateeResource( $res);
+            $result = (new EvaluateeService)->fetchEvaluateInfo($request->evaluatee_id);
+
+            return $this->return_success($result);
+        }catch(PDOException $e){
+            return $this->return_error($e->getMessage());
+        }catch(Exception $e){
+            return $this->return_error($e->getMessage());
+        }
     }
 
     public function evaluated(Request $request)
@@ -139,7 +144,14 @@ class EvaluateeController extends Controller
 
     public function getEvaluateesToRate(User $user)
     {
-        $evaluatees = $user->evaluatees()->with(['entity','departments'])->get();
-        return EvaluateeResource::collection($evaluatees);
+
+        try{
+            $evaluatees = $user->evaluatees()->with(['entity','departments'])->get();
+            return EvaluateeResource::collection($evaluatees);
+        }catch(PDOException $e){
+            return $this->return_error($e->getMessage());
+        }catch(Exception $e){
+            return $this->return_error($e->getMessage());
+        }
     }
 }
