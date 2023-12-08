@@ -16,6 +16,9 @@ class UserInfoResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id_number' => $this->whenLoaded('user',function(){
+                return $this->user->id_number;
+            }),
             'fullname' => $this->first_name . ' '.$this->middle_name .' '. $this->last_name,
             'mobile_number' => $this->mobile_number,
             'course' => $this->course,
@@ -31,7 +34,7 @@ class UserInfoResource extends JsonResource
                 }
                 return $departments;
             }),
-            'section_yaer'=> $this->whenLoaded('user',function(){
+            'section_yaers'=> $this->whenLoaded('user',function(){
                 $sy = [];
                 foreach($this->user->sectionYearDepartments as $syd){
                     array_push($sy,$syd->sectionYear->s_y);

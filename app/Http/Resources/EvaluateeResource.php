@@ -19,10 +19,13 @@ class EvaluateeResource extends JsonResource
             'id' => $this->id,
             'name'=> $this->name,
             'job_type' => $this->job_type,
+            'entity_id'=>$this->whenLoaded('entity',function(){
+                return $this->entity->id;
+            }),
             'entity_name'=>$this->whenLoaded('entity',function(){
                 return $this->entity->entity_name;
             }),
-            'deparments' =>$this->whenLoaded('SectionYearDepartments',function(){
+            'departments' =>$this->whenLoaded('SectionYearDepartments',function(){
                 $departments= [];
                 foreach($this->SectionYearDepartments as $syd){
                     if(!in_array($syd->department->name,$departments)){
@@ -44,8 +47,22 @@ class EvaluateeResource extends JsonResource
                     array_push( $classes,$class);
                 }
                 return $classes;
-            }),
 
+            }),
+            'instructorsDepartments'=> $this->whenLoaded('KlassDetails',function(){
+                $departments = [];
+                foreach($this->KlassDetails as $KlassDetail){
+                    if(!in_array($KlassDetail->sectionYearDepartment->department->name, $departments)){
+                        array_push($departments,$KlassDetail->sectionYearDepartment->department->name);
+                    }
+
+                }
+                return $departments;
+            }),
+            'is_done' => $this->whenLoaded('pivot',function(){
+                return $this->pivot->is_done;
+            }),
+            'users_done_rating'=> $this->users_count
         ];
     }
 }

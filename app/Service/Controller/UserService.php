@@ -77,26 +77,71 @@ class UserService{
 
     public function fetchEvaluateesToRate()
     {
-
-        $instructor = Entity::where('entity_name','instructor')->first();
-        $evaluatees = Evaluatee::with('entity')->where('entity_id','!=',$instructor->id)
-                                ->get();
-
-        $evaluateeDatas = EvaluateeResource::collection($evaluatees);
         $user = User::with([
-                            'sectionYearDepartments' =>function($q){
-                                $q->with([
-                                    'evaluatees' =>function($q){
-                                            $q->with('entity')->distinct();
-                                        }
-                                ]);
-                            }
+            'evaluatees' => function ($query) {
+                $query->with([
+                            'entity',
+                            'SectionYearDepartments' =>function($q){
+                            $q->with([
+                                'department',
+                            ]);
+                        }
                     ])
-                    ->find(auth()->user()->id_number);
+                      ->withCount([
+                          'users' => function ( $query) {
+                              $query->where('evaluatees_users.is_done', 1);
+                          }
+                        ]);
+            }
+        ])->find(auth()->user()->id_number);
 
-        $userDatas =  EvaluateeResource::collection($user->sectionYearDepartments[0]->evaluatees);
-        $response = [... $userDatas,...$evaluateeDatas];
-        return $response;
+        if(count($user->evaluatees) == 0){
+            $instructor = Entity::where('entity_name','instructor')->first();
+            $evaluatees = Evaluatee::with('entity')->where('entity_id','!=',$instructor->id)
+                                    ->get();
+            $evaluateeDatas = EvaluateeResource::collection($evaluatees);
+            $userInfo = User::with([
+                                'sectionYearDepartments' =>function($q){
+                                    $q->with([
+                                        'evaluatees' =>function($q){
+                                                $q->with('entity')->distinct();
+                                            }
+                                    ]);
+                                },
+                                // 'evaluatees'
+                        ])
+                        ->find(auth()->user()->id_number);
+
+            $userDatas =  EvaluateeResource::collection($userInfo->sectionYearDepartments[0]->evaluatees);
+            $result = [... $userDatas,...$evaluateeDatas];
+            $ids = collect($result)->pluck('id');
+            $userInfo->evaluatees()->attach($ids);
+            $userWithEvaluatees = User::with([
+                                                'evaluatees' =>function($q){
+                                                        $q->with([
+                                                                'entity',
+                                                                'SectionYearDepartments' =>function($q){
+                                                                    $q->with([
+                                                                        'department',
+                                                                    ]);
+                                                                }
+                                                            ])
+                                                            ->withCount([
+                                                            'users' => function ( $query) {
+                                                                $query->where('evaluatees_users.is_done', 1);
+                                                            }
+                                                        ]);
+                                                    }
+                                            ])
+                                            ->find(auth()->user()->id_number);
+            return EvaluateeResource::collection($userWithEvaluatees->evaluatees);
+
+        }
+
+
+        return EvaluateeResource::collection($user->evaluatees);
+
+
 
     }
 

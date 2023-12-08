@@ -141,17 +141,4 @@ class EvaluateeController extends Controller
         return  new UserResource($evaluatees);
 
     }
-
-    public function getEvaluateesToRate(User $user)
-    {
-
-        try{
-            $evaluatees = $user->evaluatees()->with(['entity','departments'])->get();
-            return EvaluateeResource::collection($evaluatees);
-        }catch(PDOException $e){
-            return $this->return_error($e->getMessage());
-        }catch(Exception $e){
-            return $this->return_error($e->getMessage());
-        }
-    }
 }

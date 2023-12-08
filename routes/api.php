@@ -36,7 +36,6 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
     Route::apiResource('evaluatees',EvaluateeController::class)->except('show');
     Route::post('evaluatees/evaluated',[EvaluateeController::class,'evaluated']);
     Route::post('evaluatees/evaluatee-info',[EvaluateeController::class,'evaluateeInfo']);
-    Route::post('evaluatees/evaluatees-to-rate',[EvaluateeController::class,'getEvaluateesToRate']);
 
     Route::group(['prefix' => 'class','middleware' => 'isAdminStaff'],function(){
         Route::post('/store',[ClassController::class,'storeClass']);

@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Evaluatee extends Model
 {
     use HasFactory;
-    protected $hidden = ['created_at','updated_at','pivot'];
+    protected $hidden = ['created_at','updated_at'];
     protected $fillable = [
         'name',
         'entity_id',
@@ -53,7 +53,7 @@ class Evaluatee extends Model
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class,'evaluatees_users','evaluatee_id','user_id')
-                    ->withPivot('is_done')
+                    ->withPivot(['is_done'])
                     ->withTimestamps();
     }
 

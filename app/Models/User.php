@@ -46,7 +46,7 @@ class User extends Authenticatable
         'remember_token',
         'updated_at',
         'created_at',
-        'pivot'
+        // 'pivot'
     ];
     /**
      * The attributes that should be cast.
@@ -77,7 +77,7 @@ class User extends Authenticatable
     public function evaluatees():BelongsToMany
     {
         return $this->belongsToMany(Evaluatee::class,'evaluatees_users','user_id','evaluatee_id')
-                    ->withPivot('is_done')
+                    ->withPivot(['is_done'])
                     ->withTimestamps();
     }
 
