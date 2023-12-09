@@ -7,7 +7,6 @@ use App\Models\Questionaire;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Entity extends Model
 {
@@ -16,9 +15,9 @@ class Entity extends Model
     protected $fillable = ['entity_name'];
     protected $hidden = ['updated_at', 'created_at'];
 
-    public function questionaires():BelongsToMany
+    public function questionaires():HasMany
     {
-        return $this->belongsToMany(Questionaire::class,'entities_questionaires')->withTimestamps();
+        return $this->hasMany(Questionaire::class);
     }
 
     public function evaluatees(): HasMany

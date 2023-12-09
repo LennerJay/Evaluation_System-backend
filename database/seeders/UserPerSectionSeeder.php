@@ -44,8 +44,8 @@ class UserPerSectionSeeder extends Seeder
         ])->each(function ($user) use($syd){
             UserInfo::factory()->create(['user_id' => $user->id_number]);
             $randomDeparments = Department::inRandomOrder()->take(2)->get();
-            $randomSYs = SectionYear::inRandomOrder()->take(2)->get();
             foreach( $randomDeparments as $department){
+                $randomSYs = SectionYear::inRandomOrder()->take(2)->get();
                 foreach($randomSYs as $sy){
                  $syd =  SectionYearDepartment::where('section_year_id', $sy->id)
                                                 ->where('department_id',$department->id)

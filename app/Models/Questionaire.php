@@ -7,7 +7,10 @@ use App\Models\Criteria;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 // use Illuminate\Database\Eloquent\Relations\HasMany;
 // use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
@@ -32,9 +35,9 @@ class Questionaire extends Model
         return $this->belongsToMany(Criteria::class,'criteria_questionaire')->withTimestamps();
     }
 
-    public function entities(): BelongsToMany
+    public function entity(): BelongsTo
     {
-        return $this->belongsToMany(Entity::class,'entities_questionaires')->withTimestamps();
+        return $this->belongsTo(Entity::class);
     }
 
     public function scopeQuestionaireWithCriteria(Builder $query, $id= null)

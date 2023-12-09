@@ -34,8 +34,6 @@ class UserInfoService{
                               ->first();
 
             return UserInfoResource::make($userInfo);
-            return $userInfo;
-
     }
 
 

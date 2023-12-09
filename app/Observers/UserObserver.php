@@ -12,6 +12,7 @@ class UserObserver
     public function created(User $user): void
     {
         cache()->forget("AllUsers");
+        cache()->forget("getUser*");
     }
 
     /**
@@ -19,7 +20,7 @@ class UserObserver
      */
     public function updated(User $user): void
     {
-        cache()->forget("getUser" . $user->id_number);
+        cache()->forget("getUser*");
         cache()->forget("AllUsers");
     }
 

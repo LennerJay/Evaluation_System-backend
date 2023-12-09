@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
+use Exception;
+use PDOException;
 use App\Models\Evaluatee;
 use Illuminate\Http\Request;
-use PDOException;
+use App\Http\Controllers\Controller;
+use App\Service\Controller\RatingService;
 
 class RatingContoller extends Controller
 {
@@ -31,12 +33,12 @@ class RatingContoller extends Controller
     public function store(Request $request)
     {
         try{
-            $evaluatee = Evaluatee::findOrFail($request->instructorId);
-            $evaluatee->ratings()->createMany($request->val);
-            $evaluatee->users()->updateExistingPivot($request->user_id,['is_done' => 1]);
-            return response()->json(['code'=>201,'success'=>'ratings successfully created']);
-        }catch( PDOException  $e){
-            return response()->json(['error'=>$e]);
+            $result = (new RatingService)->saveRatings($request);
+            return $this->return_success($result);
+        }catch(PDOException $e){
+            return $this->return_error($e->getMessage());
+        }catch(Exception $e){
+            return $this->return_error($e->getMessage());
         }
     }
 

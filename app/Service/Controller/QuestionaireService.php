@@ -1,9 +1,9 @@
 <?php
 namespace App\Service\Controller;
 
+use App\Http\Resources\MaxRespondentsResource;
 use App\Models\Entity;
 use App\Models\Questionaire;
-use App\Http\Resources\EntityResource;
 use App\Http\Resources\QuestionaireResource;
 
 
@@ -18,9 +18,9 @@ use App\Http\Resources\QuestionaireResource;
             'semester' => $request->semester,
             'school_year' => $request->school_year,
             'max_respondents' => $request->max_respondents,
-            'status' =>$request->status
+            'status' =>$request->status,
+            'entity_id' => $request->entity_id
            ]);
-            $questionaire->entities()->attach($request->entity_id);
 
            return QuestionaireResource::make($questionaire);
     }
@@ -60,6 +60,9 @@ use App\Http\Resources\QuestionaireResource;
         //         ->find($request->entity_id);
         //     }
         // );
+        $questionaire = Questionaire::where('entity_id', $request->entity_id)
+
+                                    ->first();
        $questionaire = Entity::with([
             'questionaires' =>function($q){
                 $q->with([
@@ -89,6 +92,13 @@ use App\Http\Resources\QuestionaireResource;
                                         ])
                                         ->get();
         return QuestionaireResource::collection($questionaires);
+    }
+
+    public function fetchMaxRespondentsEachEntity()
+    {
+        $res = Questionaire::with('entity')->where('status',1)->select('max_respondents','entity_id')->get();
+
+        return MaxRespondentsResource::collection($res);
     }
 
  }

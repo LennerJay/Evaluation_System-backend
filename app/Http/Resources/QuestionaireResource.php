@@ -23,6 +23,9 @@ class QuestionaireResource extends JsonResource
             'max_respondents' =>$this->max_respondents,
             'status' =>$this->status,
             'criterias' => CriteriaResource::collection($this->whenLoaded('criterias')),
+            'entity_name' => $this->whenLoaded('entity',function(){
+                return $this->entity->entity_name;
+            })
         ];
     }
 }

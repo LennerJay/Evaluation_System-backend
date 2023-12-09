@@ -22,6 +22,7 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
 
 
     Route::post('/questionaires/for-evaluatee',[QuestionaireContoller::class,'forEvaluatee']);
+    Route::get('/questionaires/max-respondents',[QuestionaireContoller::class,'getMaxRespondents']);
     Route::get('/questionaires/latest-questionaire',[QuestionaireContoller::class,'latestQuestionaire']);
     Route::apiResource('questionaires',QuestionaireContoller::class);
     Route::patch('/questionaires/{questionaire}/update-status',[QuestionaireContoller::class,'updateStatus']);

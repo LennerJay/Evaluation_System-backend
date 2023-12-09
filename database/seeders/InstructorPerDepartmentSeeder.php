@@ -38,14 +38,11 @@ class InstructorPerDepartmentSeeder extends Seeder
            }
         }
 
-        $evaluatees1 = Evaluatee::factory(2)->create(['entity_id'=> $entity->id]);
-        $evaluatees2 = Evaluatee::factory(2)->create(['entity_id'=> $entity->id]);
-        $randombBsit = SectionYearDepartment::where('department_id',1)->inRandomOrder()->take(2)->get();
-        $randomBshrm = SectionYearDepartment::where('department_id',2)->inRandomOrder()->take(2)->get();
-        $randomBeed = SectionYearDepartment::where('department_id',3)->inRandomOrder()->take(2)->get();
-        $randomBsed = SectionYearDepartment::where('department_id',4)->inRandomOrder()->take(2)->get();
+        $evaluatees1 = Evaluatee::factory(5)->create(['entity_id'=> $entity->id]);
+        $evaluatees2 = Evaluatee::factory(5)->create(['entity_id'=> $entity->id]);
 
         foreach($evaluatees1 as $evaluatee){
+            $randombBsit = SectionYearDepartment::where('department_id',1)->inRandomOrder()->take(2)->get();
             foreach($randombBsit as $bsit){
                 $randomSubjects = Subject::inRandomOrder()->take(2)->get();
                 foreach($randomSubjects as $randomSubject){
@@ -57,6 +54,7 @@ class InstructorPerDepartmentSeeder extends Seeder
                 }
 
             }
+            $randomBshrm = SectionYearDepartment::where('department_id',2)->inRandomOrder()->take(2)->get();
             foreach($randomBshrm as $bshrm){
                 $randomSubjects = Subject::inRandomOrder()->take(2)->get();
                 foreach($randomSubjects as $randomSubject){
@@ -70,7 +68,7 @@ class InstructorPerDepartmentSeeder extends Seeder
         }
 
         foreach($evaluatees2 as $evaluatee){
-
+            $randomBeed = SectionYearDepartment::where('department_id',3)->inRandomOrder()->take(2)->get();
             foreach($randomBeed as $beed){
                 $randomSubjects = Subject::inRandomOrder()->take(2)->get();
                 foreach($randomSubjects as $randomSubject){
@@ -82,6 +80,7 @@ class InstructorPerDepartmentSeeder extends Seeder
                 }
 
             }
+            $randomBsed = SectionYearDepartment::where('department_id',4)->inRandomOrder()->take(2)->get();
             foreach($randomBsed as $bsed){
                 $randomSubjects = Subject::inRandomOrder()->take(2)->get();
                 foreach($randomSubjects as $randomSubject){

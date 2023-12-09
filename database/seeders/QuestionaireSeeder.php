@@ -19,10 +19,10 @@ class QuestionaireSeeder extends Seeder
         $entities = Entity::all();
 
         foreach ($entities as $entity) {
-            $questionaires = Questionaire::factory(3)->create(['description' => 'This questionaire is for ' . $entity->entity_name]);
-            foreach($questionaires as $questionaire){
-                $entity->questionaires()->attach($questionaire->id);
-            }
+            $questionaires = Questionaire::factory(3)->create([
+                'description' => 'This questionaire is for ' . $entity->entity_name,
+                'entity_id' => $entity->id
+            ]);
         }
 
 

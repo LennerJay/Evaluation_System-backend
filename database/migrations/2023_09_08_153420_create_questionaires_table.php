@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('questionaires', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('entity_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->string('description');
             $table->string('semester');

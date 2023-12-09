@@ -18,9 +18,9 @@ class EntitySeeder extends Seeder
             Entity::create(['entity_name' => $entity]);
         }
         $guardId = Entity::where('entity_name','guard')->first();
-        Evaluatee::factory(5)->create(['entity_id' => $guardId]);
+        Evaluatee::factory(3)->create(['entity_id' => $guardId]);
         $canteenStaffId = Entity::where('entity_name','canteen-staff')->first();
-        Evaluatee::factory(5)->create(['entity_id' => $canteenStaffId]);
+        Evaluatee::factory(3)->create(['entity_id' => $canteenStaffId]);
 
     }
 }

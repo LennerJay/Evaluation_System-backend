@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\QuestionaireRequest;
 use App\Http\Resources\QuestionaireResource;
 use App\Service\Controller\QuestionaireService;
+use App\Service\Controller\QuestionService;
 
 class QuestionaireContoller extends Controller
 {
@@ -127,6 +128,18 @@ class QuestionaireContoller extends Controller
 
         try{
             return $this->return_success($questionaire->load('criterias'));
+        }catch(PDOException $e){
+            return $this->return_error($e->getMessage());
+        }catch(Exception $e){
+            return $this->return_error($e->getMessage());
+        }
+    }
+
+    public function getMaxRespondents()
+    {
+        try{
+            $result = (new QuestionaireService)->fetchMaxRespondentsEachEntity();
+            return $this->return_success( $result);
         }catch(PDOException $e){
             return $this->return_error($e->getMessage());
         }catch(Exception $e){
