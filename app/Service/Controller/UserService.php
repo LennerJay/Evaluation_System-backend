@@ -68,7 +68,7 @@ class UserService{
     {
         $user = User::findOrFail($request['id_number']);
         if($user->id_number !== auth()->user()->id_number){
-            return 'You are not the fcking owner of this account';
+            return 'You are not the owner of this account';
         }
         $user->password = Hash::make($request['password']);
         $user->save();
@@ -78,22 +78,24 @@ class UserService{
     public function fetchEvaluateesToRate()
     {
         $user = User::with([
-            'evaluatees' => function ($query) {
-                $query->with([
-                            'entity',
-                            'SectionYearDepartments' =>function($q){
-                            $q->with([
-                                'department',
-                            ]);
-                        }
-                    ])
-                      ->withCount([
-                          'users' => function ( $query) {
-                              $query->where('evaluatees_users.is_done', 1);
-                          }
-                        ]);
-            }
-        ])->find(auth()->user()->id_number);
+                             'evaluatees' => function ($query) {
+                                $query->with([
+                                            'entity',
+                                            'SectionYearDepartments' =>function($q){
+                                            $q->with([
+                                                'department',
+                                            ]);
+                                        }
+                                    ])
+                                    ->withCount([
+                                            'users' => function ( $query) {
+                                            $query->where('evaluatees_users.is_done', 1);
+                                        }
+                                    ]);
+                                }
+                         ])
+                        // ->withCasts(['updated_at'=> 'datetime'])
+                         ->find(auth()->user()->id_number);
 
         if(count($user->evaluatees) == 0){
             $instructor = Entity::where('entity_name','instructor')->first();
@@ -140,8 +142,6 @@ class UserService{
 
 
         return EvaluateeResource::collection($user->evaluatees);
-
-
 
     }
 

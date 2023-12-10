@@ -53,7 +53,7 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
 
 
     Route::post('/ratings',[RatingContoller::class,'store']);
-
+    Route::post('/ratings/summary',[RatingContoller::class,'getRatingsSummary']);
 
 
     Route::apiResource('users',UserController::class)->except(['show']);

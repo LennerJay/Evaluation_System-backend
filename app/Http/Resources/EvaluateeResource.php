@@ -63,7 +63,10 @@ class EvaluateeResource extends JsonResource
                 return $this->pivot->is_done;
             }),
             'date_rated' => $this->whenLoaded('pivot',function(){
-                return $this->pivot->updated_at;
+                if($this->pivot->is_done){
+                    return $this->pivot->updated_at->diffForHumans();
+                }
+
             }),
             'users_done_rating'=> $this->users_count
         ];

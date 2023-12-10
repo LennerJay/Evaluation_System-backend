@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('course')->nullable();
             $table->string('email')->unique()->nullable();
             $table->unsignedBigInteger('mobile_number')->nullable();
-            $table->integer('regular')->default(0);
             $table->timestamps();
         });
     }
