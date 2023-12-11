@@ -23,21 +23,24 @@ class UserInfoResource extends JsonResource
             'mobile_number' => $this->mobile_number,
             'course' => $this->course,
             'email' => $this->email,
-            'regular' => $this->regular,
             'role_name' => $this->whenLoaded('user',function(){
                 return $this->user->role->name;
             }),
             'departments'=> $this->whenLoaded('user',function(){
                 $departments = [];
                 foreach($this->user->sectionYearDepartments as $syd){
-                    array_push($departments,$syd->department->name);
+                    if(!in_array($syd->department->name,$departments)){
+                        array_push($departments,$syd->department->name);
+                    }
                 }
                 return $departments;
             }),
-            'section_yaers'=> $this->whenLoaded('user',function(){
+            'section_years'=> $this->whenLoaded('user',function(){
                 $sy = [];
                 foreach($this->user->sectionYearDepartments as $syd){
-                    array_push($sy,$syd->sectionYear->s_y);
+                    if(!in_array($syd->sectionYear->s_y,$sy)){
+                        array_push($sy,$syd->sectionYear->s_y);
+                    }
                 }
                 return $sy;
             }),
@@ -47,6 +50,7 @@ class UserInfoResource extends JsonResource
                     foreach($syd->KlassDetails as $classDetails){
                         $class = new stdClass;
                         $class->department = $syd->department->name;
+                        $class->section_year =$syd->sectionYear->s_y;
                         $class->evaluatee_id = $classDetails->evaluatee->id;
                         $class->evaluatee_name = $classDetails->evaluatee->name;
                         $class->subject = $classDetails->subject->name;
@@ -56,6 +60,8 @@ class UserInfoResource extends JsonResource
                     }
 
                 }
+
+
                 return $classes;
 
              }),
