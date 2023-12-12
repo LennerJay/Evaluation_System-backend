@@ -1,9 +1,12 @@
 <?php
 namespace App\Service\Controller;
 
+use App\Http\Resources\RatingsSummaryQuestionaire;
 use App\Models\Rating;
 use App\Models\Evaluatee;
-
+use App\Http\Resources\RatingsSummaryResource;
+use App\Models\EvaluateeUser;
+use stdClass;
 
 class RatingService {
 
@@ -24,9 +27,27 @@ class RatingService {
                                 }
                             ])
                             ->where('evaluatee_id',$request->evaluatee_id)
-                            ->where('evaluator_id',auth()->user()->id_number)->get();
+                            ->where('evaluator_id',auth()->user()->id_number)
+                            ->get();
+        $ratingsSummary = RatingsSummaryResource::collection( $ratings);
+        $res = EvaluateeUser::with([
+                                'questionaire' => function ($q) {
+                                    $q->select(['id', 'title', 'description', 'semester', 'school_year']);
+                                }
+                            ])
+                            ->where('user_id', auth()->user()->id_number)
+                            ->where('evaluatee_id', $request->evaluatee_id)
+                            ->select('questionaire_id')
+                            ->first();
+        $questioanire =  RatingsSummaryQuestionaire::make($res);
 
-        return $ratings;
+        $result = new stdClass;
+
+        $result->questionaire = $questioanire;
+        $result->ratingSummary = $ratingsSummary;
+        return $result;
+
     }
+
 
 }

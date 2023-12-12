@@ -24,7 +24,10 @@ class UserResource extends JsonResource
                 $departments = [];
 
                 foreach($this->sectionYearDepartments as $syd){
-                    array_push($departments,$syd->department->name);
+                    if(!in_array($syd->department->name,$departments)){
+                        array_push($departments,$syd->department->name);
+                    }
+
                 }
 
                 return $departments;

@@ -41,25 +41,6 @@ use App\Http\Resources\QuestionaireResource;
 
     public function fetchForEvaluatee($request)
     {
-        // $questionaire = cache()->remember(
-        //     'questionaire' . $request->entity_id,
-        //     now()->addDay(),
-        //     function() use ($request){
-        //         return Entity::with([
-        //             'questionaires' =>function($q){
-        //                 $q->with([
-        //                     'criterias' => function($query){
-        //                         $query->with('questions');
-        //                     }
-        //                 ])
-        //                 ->where('status', true)
-        //                 ->latest('updated_at')
-        //                 ->first();
-        //             }
-        //         ])
-        //         ->find($request->entity_id);
-        //     }
-        // );
         $questionaire = Questionaire::where('entity_id', $request->entity_id)
 
                                     ->first();
@@ -67,7 +48,7 @@ use App\Http\Resources\QuestionaireResource;
             'questionaires' =>function($q){
                 $q->with([
                     'criterias' => function($query){
-                        $query->with('questions');
+                        $query->with('questions')->withCount('questions');
                     }
                 ])
                 ->where('status', true)
