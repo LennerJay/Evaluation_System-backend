@@ -5,10 +5,8 @@ namespace App\Http\Controllers\Api\v1;
 use Exception;
 use PDOException;
 use App\Models\Entity;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EntityRequest;
-use App\Http\Resources\EntityResource;
 
 class EntityController extends Controller
 {

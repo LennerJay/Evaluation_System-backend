@@ -47,7 +47,7 @@ class EvaluateeService{
             'entity_id'=>$request->entity_id
         ]);
 
-        return EvaluateeResource::make($evaluate);
+        return EvaluateeResource::make($evaluate->load(['entity']));
 
     }
 

@@ -42,7 +42,6 @@ use App\Http\Resources\QuestionaireResource;
     public function fetchForEvaluatee($request)
     {
         $questionaire = Questionaire::where('entity_id', $request->entity_id)
-
                                     ->first();
        $questionaire = Entity::with([
             'questionaires' =>function($q){
@@ -57,8 +56,6 @@ use App\Http\Resources\QuestionaireResource;
             }
         ])
         ->find($request->entity_id);
-        // $entity = Entity::with('questionaires')->findOrfail($request->entity_id);
-        // return new EntityResource($questionaire);
         return $questionaire;
 
     }
