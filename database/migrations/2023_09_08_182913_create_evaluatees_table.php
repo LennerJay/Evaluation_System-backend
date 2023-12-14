@@ -16,7 +16,9 @@ return new class extends Migration
             $table->foreignId('entity_id')->constrained();
             $table->string('name');
             $table->boolean('job_type');
+            $table->string('img_url')->nullable();
             $table->timestamps();
+            $table->unique(['name']);
         });
     }
 

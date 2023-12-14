@@ -41,13 +41,13 @@ class EvaluateeService{
 
     public function saveEvaluatees($request)
     {
-        $evaluate = Evaluatee::create([
+        $evaluatee = Evaluatee::create([
             'name' => $request->name,
             'job_type'=>$request->job_type,
             'entity_id'=>$request->entity_id
         ]);
 
-        return EvaluateeResource::make($evaluate->load(['entity']));
+        return EvaluateeResource::make($evaluatee->load(['entity']));
 
     }
 
@@ -57,7 +57,7 @@ class EvaluateeService{
         $evaluatee->job_type = $request->job_type;
         $evaluatee->entity_id = $request->entity_id;
         $evaluatee->save();
-        return $evaluatee;
+        return EvaluateeResource::make($evaluatee->load(['entity']));
 
     }
 
