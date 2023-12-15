@@ -40,7 +40,6 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
 
     Route::group(['prefix' => 'class','middleware' => 'isAdminStaff'],function(){
         Route::post('/store',[ClassController::class,'storeClass']);
-        Route::patch('/update',[ClassController::class,'updateClass']);
         Route::delete('/delete',[ClassController::class,'deleteClass']);
     });
 
