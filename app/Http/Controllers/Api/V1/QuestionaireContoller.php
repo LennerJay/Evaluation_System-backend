@@ -23,7 +23,7 @@ class QuestionaireContoller extends Controller
 
     public function index()
     {
-        return $this->return_success(QuestionaireResource::collection(Questionaire::all()));
+        return $this->return_success(QuestionaireResource::collection(Questionaire::with('entity')->get()));
     }
 
     public function store(QuestionaireRequest $request)
@@ -83,12 +83,13 @@ class QuestionaireContoller extends Controller
     {
         $this->authorize('update', $questionaire);
         try {
-            if($request->update_time){
-                $questionaire->updated_at =  $request->update_time;
+            // if($request->update_time){
+            //     $questionaire->updated_at =  $request->update_time;
 
-            }else{
-                $questionaire->status =  !$questionaire->status;
-            }
+            // }else{
+            //     $questionaire->status =  !$questionaire->status;
+            // }
+            $questionaire->status =  !$questionaire->status;
             $questionaire->save();
             return $this->return_success($questionaire);
         }catch(PDOException $e){
