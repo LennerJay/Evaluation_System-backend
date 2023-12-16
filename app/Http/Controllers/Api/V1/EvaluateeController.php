@@ -93,7 +93,7 @@ class EvaluateeController extends Controller
     public function update(Evaluatee $evaluatee,EvaluateeRequest $request)
     {
         try{
-            $result = (new EvaluateeService)->updateEvaluatee( $evaluatee, $request );
+            $result = (new EvaluateeService)->updateEvaluatee($evaluatee, $request);
             return $this->return_success($result);
         }catch(PDOException $e){
             return $this->return_error($e->getMessage());

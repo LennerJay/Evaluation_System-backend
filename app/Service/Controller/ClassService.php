@@ -9,22 +9,22 @@ use App\Models\Subject;
 class ClassService {
 
 
-    public function saveUpdateClass($request)
+    public function saveClass($request)
     {
         $subject = Subject::findOrfail($request->subject_id);
         $evaluatee = Evaluatee::findOrfail($request->evaluatee_id);
         $syd = SectionYearDepartment::where('department_id',$request->department_id)
                                              ->where('section_year_id', $request->s_y_id)
                                              ->first();
-        $klass =  KlassDetails::updateOrCreate([
+        $klass =  KlassDetails::Create([
                 's_y_d_id'=> $syd->id,
                 'subject_id'=>$subject->id,
                 'evaluatee_id'=> $evaluatee->id,
+                'time'=>$request->time,
+                'day'=>$request->day
+                ]);
 
-                ],['time'=>$request->time,
-            'day'=>$request->day]);
-
-            return $klass ;
+            return $klass;
 
         // This code below is used to save many requests
         // foreach($request->datas as $data){
@@ -48,9 +48,26 @@ class ClassService {
 
     }
 
+    public function updateClass($request){
+        $subject = Subject::findOrfail($request->subject_id);
+        $evaluatee = Evaluatee::findOrfail($request->evaluatee_id);
+        $syd = SectionYearDepartment::where('department_id',$request->department_id)
+                                             ->where('section_year_id', $request->s_y_id)
+                                             ->first();
+        $class = KlassDetails::findOrfail($request->klass_id);
+        $class->s_y_d_id = $syd->id;
+        $class->subject_id = $subject->id;
+        $class->evaluatee_id = $evaluatee->id;
+        $class->time = $request->time;
+        $class->day =  $request->day;
+        $class->save();
+        return $class;
+    }
+
+
     public function deleteClass($request)
     {
-        $class = KlassDetails::findOrfail($request->id);
+        $class = KlassDetails::findOrfail($request->klass_id);
         $class->delete();
         return 'Deleted successfully';
     }

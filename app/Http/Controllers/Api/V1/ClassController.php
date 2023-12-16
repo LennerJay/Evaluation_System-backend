@@ -14,7 +14,7 @@ class ClassController extends Controller
     public function storeClass(KlassDetailRequest $request)
     {
         try{
-            $result = (new ClassService)->saveUpdateClass($request);
+            $result = (new ClassService)->saveClass($request);
             return $this->return_success( $result);
         }catch(PDOException $e){
             return $this->return_error($e->getMessage());
@@ -23,12 +23,23 @@ class ClassController extends Controller
         }
     }
 
+    public function updateClass(Request $request)
+    {
+        try{
+            $result = (new ClassService)->updateClass($request);
+            return $this->return_success( $result);
+        }catch(PDOException $e){
+            return $this->return_error($e->getMessage());
+        }catch(Exception $e){
+            return $this->return_error($e->getMessage());
+        }
+    }
 
     function deleteClass(Request $request)
     {
         try{
             $result = (new ClassService)->deleteClass($request);
-            return $this->return_success( $result);
+            return $this->return_success($result);
         }catch(PDOException $e){
             return $this->return_error($e->getMessage());
         }catch(Exception $e){
