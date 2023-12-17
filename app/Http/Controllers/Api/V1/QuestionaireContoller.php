@@ -23,7 +23,7 @@ class QuestionaireContoller extends Controller
 
     public function index()
     {
-        return $this->return_success(QuestionaireResource::collection(Questionaire::with('entity')->get()));
+        return $this->return_success(QuestionaireResource::collection(Questionaire::with('entity')->latest('updated_at')->get()));
     }
 
     public function store(QuestionaireRequest $request)
@@ -91,7 +91,7 @@ class QuestionaireContoller extends Controller
             // }
             $questionaire->status =  !$questionaire->status;
             $questionaire->save();
-            return $this->return_success($questionaire);
+            return $this->return_success(QuestionaireResource::make($questionaire->load('entity')));
         }catch(PDOException $e){
             return $this->return_error($e->getMessage());
         }catch(Exception $e){

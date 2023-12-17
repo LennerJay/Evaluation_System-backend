@@ -26,7 +26,10 @@ class QuestionaireResource extends JsonResource
             'criterias' => CriteriaResource::collection($this->whenLoaded('criterias')),
             'entity_name' => $this->whenLoaded('entity',function(){
                 return $this->entity->entity_name;
-            })
+            }),
+            'entity_id' => $this->whenLoaded('entity',function(){
+                return $this->entity->id;
+            }),
         ];
     }
 }

@@ -22,12 +22,13 @@ use App\Http\Resources\QuestionaireResource;
             'entity_id' => $request->entity_id
            ]);
 
-           return QuestionaireResource::make($questionaire);
+           return QuestionaireResource::make($questionaire->load('entity'));
     }
 
     public function updateQuestionaire($questionaire,$request)
     {
         $questionaire->update([
+            'entity_id'=> $request->entity_id,
             'title'=>$request->title,
             'description'=>$request->description,
             'semester' =>$request->semester,
@@ -35,8 +36,8 @@ use App\Http\Resources\QuestionaireResource;
             'max_respondents'=>$request->max_respondents,
             'status'=>$request->status
         ]);
-
-        return QuestionaireResource::make($questionaire);
+        $questionaire->save();
+        return QuestionaireResource::make($questionaire->load('entity'));
     }
 
     public function fetchForEvaluatee($request)

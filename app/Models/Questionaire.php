@@ -20,6 +20,7 @@ class Questionaire extends Model
 
 
     protected $fillable = [
+        'entity_id',
         'title',
         'description',
         'semester',
