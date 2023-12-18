@@ -89,9 +89,13 @@ class QuestionaireContoller extends Controller
             // }else{
             //     $questionaire->status =  !$questionaire->status;
             // }
-            $questionaire->status =  !$questionaire->status;
-            $questionaire->save();
-            return $this->return_success(QuestionaireResource::make($questionaire->load('entity')));
+            $res = $questionaire->criterias->isNotEmpty();
+            if($res){
+                    $questionaire->status =  !$questionaire->status;
+                    $questionaire->save();
+                    return $this->return_success(QuestionaireResource::make($questionaire->load(['entity'])));
+                }
+            return $this->return_success( $res );
         }catch(PDOException $e){
             return $this->return_error($e->getMessage());
         }catch(Exception $e){

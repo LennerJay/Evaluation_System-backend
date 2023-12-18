@@ -21,7 +21,7 @@ class DepartmentController extends Controller
     public function index()
     {
         try{
-            $departments =Department::all();
+            $departments =Department::latest()->get();
             return $this->return_success(DepartmentResource::collection( $departments));
         }catch(PDOException $e){
             return $this->return_error($e);
@@ -33,6 +33,10 @@ class DepartmentController extends Controller
     public function store(DepartmentRequest $request)
     {
         try{
+            $exist = Department::where('name',$request->name)->exists();
+            if($exist){
+                return $this->return_success(false);
+            }
             $department =  Department::create([
                 'name' => $request->name
             ]);
@@ -48,6 +52,10 @@ class DepartmentController extends Controller
     public function update(DepartmentRequest $request, Department $department)
     {
         try{
+            $exist = Department::where('name',$request->name)->exists();
+            if($exist){
+                return $this->return_success(false);
+            }
 
             $department->name = $request->name;
             $department->save();
