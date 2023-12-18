@@ -15,24 +15,22 @@ class SectionYearController extends Controller
 
     public function index()
     {
-        $sy = cache()->remember(
-            'allSectionYears',
-            now()->addDay(),
-            function(){
-                return SectionYear::all();
-            }
-        );
-        return SectionYearResource::collection($sy);
+            $sy = SectionYearResource::collection(SectionYear::all());
+            return $this->return_success($sy);
     }
 
 
-    public function store(SectionYearRequest $request)
+    public function store(Request $request)
     {
         try{
+            $exist = SectionYear::where('s_y', $request->s_y)->exists();
+            if( $exist ){
+                $this->return_success(false);
+            }
             $sy = SectionYear::create([
                 's_y' => $request->s_y
             ]);
-            return $this->return_success($sy);
+            return $this->return_success(SectionYearResource::make($sy));
         }catch(PDOException $e){
             return $this->return_error($e);
         }catch(  Exception $e){
@@ -43,7 +41,12 @@ class SectionYearController extends Controller
     public function update(SectionYearRequest $request, SectionYear $sy)
     {
         try{
+            $exist = SectionYear::where('s_y', $request->s_y)->exists();
+            if( $exist ){
+                $this->return_success(false);
+            }
             $sy->s_y = $request->s_y;
+            $sy->save();
             return $this->return_success($sy);
         }catch(PDOException $e){
             return $this->return_error($e);

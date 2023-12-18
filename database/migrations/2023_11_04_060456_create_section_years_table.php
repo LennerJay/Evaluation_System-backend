@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('section_years', function (Blueprint $table) {
             $table->id();
-            $table->string('s_y');
+            $table->string('s_y')->unique();
             $table->timestamps();
         });
     }

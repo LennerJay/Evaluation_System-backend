@@ -13,9 +13,10 @@ class ClassService {
     {
         $subject = Subject::findOrfail($request->subject_id);
         $evaluatee = Evaluatee::findOrfail($request->evaluatee_id);
-        $syd = SectionYearDepartment::where('department_id',$request->department_id)
-                                             ->where('section_year_id', $request->s_y_id)
-                                             ->first();
+        $syd = SectionYearDepartment::firstOrCreate([
+            'department_id' => $request->department_id,
+            'section_year_id' => $request->s_y_id,
+        ]);
         $klass =  KlassDetails::Create([
                 's_y_d_id'=> $syd->id,
                 'subject_id'=>$subject->id,
@@ -51,9 +52,10 @@ class ClassService {
     public function updateClass($request){
         $subject = Subject::findOrfail($request->subject_id);
         $evaluatee = Evaluatee::findOrfail($request->evaluatee_id);
-        $syd = SectionYearDepartment::where('department_id',$request->department_id)
-                                             ->where('section_year_id', $request->s_y_id)
-                                             ->first();
+        $syd = SectionYearDepartment::firstOrCreate([
+            'department_id' => $request->department_id,
+            'section_year_id' => $request->s_y_id,
+        ]);
         $class = KlassDetails::findOrfail($request->klass_id);
         $class->s_y_d_id = $syd->id;
         $class->subject_id = $subject->id;

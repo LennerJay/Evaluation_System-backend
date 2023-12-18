@@ -18,6 +18,11 @@ class SectionYearDepartment extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'department_id',
+        'section_year_id'
+    ];
+
     protected $hidden = [
         'updated_at',
         'created_at',
