@@ -22,14 +22,11 @@ class UserResource extends JsonResource
             'infos' => new UserInfoResource($this->whenLoaded('userInfo')),
             'departments' => $this->whenLoaded('sectionYearDepartments',function(){
                 $departments = [];
-
                 foreach($this->sectionYearDepartments as $syd){
                     if(!in_array($syd->department->name,$departments)){
                         array_push($departments,$syd->department->name);
                     }
-
                 }
-
                 return $departments;
             }),
             'year_section' => $this->whenLoaded('sectionYearDepartments',function(){
@@ -37,9 +34,9 @@ class UserResource extends JsonResource
                 foreach($this->sectionYearDepartments as $syd){
                     array_push($yearSections,$syd->sectionYear->s_y);
                 }
-
                 return $yearSections;
              }),
+             'evaluatees_count' => $this->evaluatees_count
 
         ];
     }

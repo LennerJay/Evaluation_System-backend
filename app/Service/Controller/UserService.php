@@ -14,19 +14,29 @@ class UserService{
 
     public function fetchAllUsers()
     {
-        $users = cache()->remember(
-            'AllUsers',
-            3600,
-            function () {
-            return  User::with([
-                'role',
-                'sectionYearDepartments' => fn($q) => $q->with(['department','sectionYear'])
-                ])
-                ->latest()->get();
-        });
-      return  UserResource::collection($users);
+    //     $users = cache()->remember(
+    //         'AllUsers',
+    //         3600,
+    //         function () {
+    //         return  User::with([
+    //             'role',
+    //             'sectionYearDepartments' => fn($q) => $q->with(['department','sectionYear'])
+    //             ])
+    //             ->latest()->get();
+    //     });
+    //   return  UserResource::collection($users);
+        $users =  User::with([
+            'role',
+            'sectionYearDepartments' => fn($q) => $q->with(['department','sectionYear'])
+            ])
+            ->withCount([
+                'evaluatees as evaluatees_count' => function ($q) {
+                    $q->where('evaluatees_users.is_done', true);
+                }
+            ])
+            ->latest()->get();
+      return UserResource::collection($users);
     }
-
 
     public function saveManyStudentsBySection($request)
     {

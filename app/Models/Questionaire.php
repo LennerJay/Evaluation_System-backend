@@ -56,7 +56,7 @@ class Questionaire extends Model
 
     public function scopeEvaluationFormFor(Builder $query,$id)
     {
-        $query->with([
+       return $query->with([
             'criterias' => function($query)use($id){
                 $query->with([
                     'questions'=> function($q)use($id){

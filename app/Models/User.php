@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-
+use Illuminate\Database\Eloquent\Builder;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -46,7 +46,6 @@ class User extends Authenticatable
         'remember_token',
         'updated_at',
         'created_at',
-        // 'pivot'
     ];
     /**
      * The attributes that should be cast.
@@ -66,7 +65,7 @@ class User extends Authenticatable
 
     public function ratings():HasMany
     {
-        return $this->hasMany(Ratings::class,'user_id','id_number');
+        return $this->hasMany(Rating::class,'user_id','id_number');
     }
 
     public function questions(): HasManyThrough
@@ -76,8 +75,8 @@ class User extends Authenticatable
 
     public function evaluatees():BelongsToMany
     {
-        return $this->belongsToMany(Evaluatee::class,'evaluatees_users','user_id','evaluatee_id')
-                    ->withPivot(['is_done'])
+        return $this->belongsToMany(Evaluatee::class,'evaluatees_users','user_id','evaluatee_id','id_number','id')
+                    ->withPivot(['is_done','questionaire_id'])
                     ->withTimestamps();
     }
 

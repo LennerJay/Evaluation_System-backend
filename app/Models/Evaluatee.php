@@ -52,7 +52,7 @@ class Evaluatee extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class,'evaluatees_users','evaluatee_id','user_id')
+        return $this->belongsToMany(User::class,'evaluatees_users','evaluatee_id','user_id','id','id_number')
                     ->withPivot(['is_done','questionaire_id'])
                     ->withTimestamps();
     }

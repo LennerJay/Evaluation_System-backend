@@ -26,9 +26,9 @@ class UserController extends Controller
             $users = (new UserService)->fetchAllUsers();
             return $this->return_success($users);
         }catch(PDOException $e){
-            return $this->return_error($e);
+            return $this->return_error($e->getMessage());
         }catch(Exception $e){
-            return $this->return_error($e);
+            return $this->return_error($e->getMessage());
         }
     }
 
