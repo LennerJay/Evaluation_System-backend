@@ -2,6 +2,7 @@
 
 namespace App\Service\Controller;
 
+use App\Http\Resources\FetchingInfoResource;
 use App\Http\Resources\UserInfoResource;
 use App\Models\UserInfo;
 
@@ -9,31 +10,47 @@ class UserInfoService{
 
     public function getUserInfo($request)
     {
-        $userid = null;
         if($request->id_number){
-            $userid = $request->id_number;
+            $userInfo = UserInfo::with([
+                'user'=>function($q){
+                    $q->with([
+                        'role',
+                        'sectionYearDepartments' => function($q){
+                            $q->with([
+                                'department',
+                                'sectionYear',
+                            ]);
+                        }
+                    ]);
+                }
+             ])
+              ->where('user_id', $request->id_number)
+              ->first();
+              return FetchingInfoResource::make($userInfo);
+
         }
         else{
-            $userid = auth()->user()->id_number;
+            $userInfo = UserInfo::with([
+                'user'=>function($q){
+                    $q->with([
+                        'role',
+                        'sectionYearDepartments' => function($q){
+                            $q->with([
+                                'department',
+                                'sectionYear',
+                                'KlassDetails'=> fn($q) => $q->with(['subject','evaluatee'])
+                            ]);
+                        }
+                    ]);
+                }
+             ])
+              ->where('user_id',auth()->user()->id_number)
+              ->first();
+              return UserInfoResource::make($userInfo);
         }
-        $userInfo = UserInfo::with([
-                                'user'=>function($q){
-                                    $q->with([
-                                        'role',
-                                        'sectionYearDepartments' => function($q){
-                                            $q->with([
-                                                'department',
-                                                'sectionYear',
-                                                'KlassDetails'=> fn($q) => $q->with(['subject','evaluatee'])
-                                            ]);
-                                        }
-                                    ]);
-                                }
-                             ])
-                              ->where('user_id',$userid)
-                              ->first();
 
-            return UserInfoResource::make($userInfo);
+
+
             // return $userInfo;
     }
 
@@ -53,6 +70,15 @@ class UserInfoService{
         $user->regular= $request['regular'];
         $user->save();
         return $user;
+
+    }
+
+    public function removeUserInfo($request)
+    {
+        $userInfo = UserInfo::findOrFail($request->id_number);
+        $userInfo->delete();
+
+        return "Successfully removed";
 
     }
 }

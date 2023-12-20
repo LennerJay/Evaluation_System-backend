@@ -61,12 +61,15 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
     Route::get('users/user',[UserController::class,'getUser']);
     Route::get('users/evaluatees-to-rate',[UserController::class,'getEvaluateesToRate']);
     Route::post('users/change-password',[UserController::class,'changePassword']);
-    Route::patch('users/{user}/reset-password',[UserController::class,'resetPassword']);
+    Route::post('users/{user}/reset-password',[UserController::class,'resetPassword']);
 
 
-    Route::apiResource('user-infos',UserInfoController::class)->except(['index','show','update']);
-    Route::get('/user-infos',[UserInfoController::class,'showDetails']);
-    // Route::get('/user-infos/delete',[UserInfoController::class,'showDetails']);
+    Route::controller(UserInfoController::class)->group(function(){
+        Route::post('/user-infos','showDetails');
+        Route::post('/user-infos/store','store');
+        Route::delete('/user-infos/{userInfo}','destroy');
+
+    });
 
 
 

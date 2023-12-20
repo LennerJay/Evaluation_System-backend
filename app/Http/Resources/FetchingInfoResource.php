@@ -2,11 +2,10 @@
 
 namespace App\Http\Resources;
 
-use stdClass;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserInfoResource extends JsonResource
+class FetchingInfoResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,7 +14,7 @@ class UserInfoResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        return[
             'userInfo_id'=> $this->id,
             'id_number' => $this->whenLoaded('user',function(){
                 return $this->user->id_number;
@@ -45,27 +44,6 @@ class UserInfoResource extends JsonResource
                 }
                 return $sy;
             }),
-            'classes'=> $this->whenLoaded('user',function(){
-                $classes = [];
-                foreach($this->user->sectionYearDepartments as $syd){
-                    foreach($syd->KlassDetails as $classDetails){
-                        $class = new stdClass;
-                        $class->department = $syd->department->name;
-                        $class->section_year =$syd->sectionYear->s_y;
-                        $class->evaluatee_id = $classDetails->evaluatee->id;
-                        $class->evaluatee_name = $classDetails->evaluatee->name;
-                        $class->subject = $classDetails->subject->name;
-                        $class->time = $classDetails->time;
-                        $class->day = $classDetails->day;
-                        array_push( $classes,$class);
-                    }
-
-                }
-
-
-                return $classes;
-
-             }),
         ];
     }
 }

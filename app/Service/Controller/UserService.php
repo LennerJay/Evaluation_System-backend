@@ -14,17 +14,6 @@ class UserService{
 
     public function fetchAllUsers()
     {
-    //     $users = cache()->remember(
-    //         'AllUsers',
-    //         3600,
-    //         function () {
-    //         return  User::with([
-    //             'role',
-    //             'sectionYearDepartments' => fn($q) => $q->with(['department','sectionYear'])
-    //             ])
-    //             ->latest()->get();
-    //     });
-    //   return  UserResource::collection($users);
         $users =  User::with([
             'role',
             'sectionYearDepartments' => fn($q) => $q->with(['department','sectionYear'])
@@ -40,15 +29,22 @@ class UserService{
 
     public function saveManyStudentsBySection($request)
     {
+        $defaultPassword = Hash::make(123456);
         foreach($request['ids'] as $id){
-            User::factory()->create(['id_number'=>$id , 'role_id'=>$request['role_id']]);
+            $user = User::firstOrNew(['id_number' => $id]);
+            if(!$user->exists){
+                $user->id_number = $id;
+                $user->password = $defaultPassword;
+                $user->role_id = $request['role_id'];
+                $user->save();
+            }
         }
         $syd = SectionYearDepartment::firstOrCreate([
             'section_year_id' => $request['s_y_id'],
             'department_id' =>$request['department_id']
         ]);
 
-        $syd->users()->attach($request['ids']);
+        $syd->users()->syncWithoutDetaching($request['ids']);
 
         $result = SectionYearDepartment::with([
             'department',
@@ -57,6 +53,7 @@ class UserService{
         ])->find($syd->id);
 
         return $result;
+        return $request['s_y_id'];
     }
 
     public function updateIdNumber($user,$request)

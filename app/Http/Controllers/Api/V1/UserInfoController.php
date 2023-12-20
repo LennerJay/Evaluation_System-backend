@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserInfoRequest;
 use App\Service\Controller\UserInfoService;
 use Exception;
+use Illuminate\Support\Facades\Gate;
 
 class UserInfoController extends Controller
 {
@@ -24,7 +25,7 @@ class UserInfoController extends Controller
         }
     }
 
-    public function store( UserInfoRequest $request)
+    public function store(UserInfoRequest $request)
     {
         try{
             $result = (new UserInfoService)->updateUserInfo( $request);
@@ -37,14 +38,14 @@ class UserInfoController extends Controller
 
     }
 
-
-
     public function destroy(UserInfo $userInfo)
     {
-        $this->authorize('delete', $userInfo);
+        if (! Gate::allows('allow-action', auth()->user()->id_number)) {
+            abort(403);
+        }
         try{
             $userInfo->delete();
-            return $this->return_success('Successfully deleted');
+            return $this->return_success('Successfully Deleted');
         }catch(PDOException $e){
             return $this->return_error($e);
         }catch(  Exception $e){

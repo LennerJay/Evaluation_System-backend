@@ -26,7 +26,6 @@ class SectionYearDepartment extends Model
     protected $hidden = [
         'updated_at',
         'created_at',
-        'pivot'
     ];
 
     public function department():BelongsTo
