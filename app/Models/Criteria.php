@@ -15,7 +15,7 @@ class Criteria extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['description'];
+    protected $fillable = ['description','status'];
     // protected $hidden = [];
     protected $hidden = ['updated_at', 'created_at','pivot'];
 

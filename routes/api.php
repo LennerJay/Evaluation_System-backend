@@ -27,12 +27,13 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
     Route::apiResource('questionaires',QuestionaireContoller::class);
     Route::patch('/questionaires/{questionaire}/update-status',[QuestionaireContoller::class,'updateStatus']);
     Route::get('/questionaires/{questionaire}/with-criterias',[QuestionaireContoller::class,'withCriterias']);
-
-    Route::apiResource('criterias',CriteriaContoller::class);
-    Route::get('/criterias/{criteria}/with-questions',[CriteriaContoller::class,'withQuestions']);
+    Route::post('/questionaires/{questionaire}/remove-criterias',[QuestionaireContoller::class,'removeCriteria']);
 
 
+
+    Route::post('questions/by-criteria',[QuestionContoller::class,'getQuestionByCriteria']);
     Route::apiResource('questions',QuestionContoller::class)->only('store','update','destroy');
+
 
     Route::apiResource('evaluatees',EvaluateeController::class)->except('show');
     Route::post('evaluatees/evaluated',[EvaluateeController::class,'evaluated']);
@@ -50,6 +51,8 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
     Route::apiResource('roles',RoleController::class)->only(['index']);
     Route::apiResource('subjects',SubjectController::class);
     Route::apiResource('section-year',SectionYearController::class);
+    Route::apiResource('criterias',CriteriaContoller::class);
+
 
 
     Route::post('/ratings',[RatingContoller::class,'store']);

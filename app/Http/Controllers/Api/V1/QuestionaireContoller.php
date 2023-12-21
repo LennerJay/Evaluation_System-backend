@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\QuestionaireRequest;
 use App\Http\Resources\QuestionaireResource;
+use App\Models\Criteria;
 use App\Service\Controller\QuestionaireService;
 use App\Service\Controller\QuestionService;
 
@@ -132,7 +133,8 @@ class QuestionaireContoller extends Controller
     {
 
         try{
-            return $this->return_success($questionaire->load('criterias'));
+            return $this->return_success($questionaire->load(['criterias','criterias.questions']));
+            // return $this->return_success($questionaire);
         }catch(PDOException $e){
             return $this->return_error($e->getMessage());
         }catch(Exception $e){
@@ -151,4 +153,20 @@ class QuestionaireContoller extends Controller
             return $this->return_error($e->getMessage());
         }
     }
+
+    public function removeCriteria(Questionaire $questionaire,Request $request)
+    {
+        try{
+            $criteria = Criteria::find($request->criteria_id);
+            $criteria->status = 0;
+            $criteria->save();
+            $questionaire->criterias()->detach($criteria->id);
+            return $this->return_success("Removed successfully");
+        }catch(PDOException $e){
+            return $this->return_error($e->getMessage());
+        }catch(Exception $e){
+            return $this->return_error($e->getMessage());
+        }
+    }
+
 }

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('criterias', function (Blueprint $table) {
             $table->id();
             $table->string('description');
+            $table->boolean('status')->default(false);
             $table->timestamps();
         });
     }

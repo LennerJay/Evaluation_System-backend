@@ -17,6 +17,18 @@ class QuestionContoller extends Controller
         $this->authorizeResource(Question::class);
     }
 
+    public function getQuestionByCriteria(Request $request)
+    {
+        try{
+            $result = Question::where('criteria_id', $request->criteria_id)->get();
+            return $this->return_success($result);
+        }catch(PDOException $e){
+            return $this->return_error($e);
+        }catch(Exception $e){
+            return $this->return_error($e);
+        }
+    }
+
     public function store(Request $request)
     {
         try{

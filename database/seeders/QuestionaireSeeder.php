@@ -32,6 +32,8 @@ class QuestionaireSeeder extends Seeder
         foreach($questionaires as $questionaire){
 
             $criterias = Criteria::factory(5)->create()->each(function($criteria)use ($questionaire){
+                $criteria->status = true;
+                $criteria->save();
                 $questionaire->criterias()->attach($criteria->id);
             });
             foreach($criterias as $criteria){

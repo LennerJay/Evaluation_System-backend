@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\V1;
 use Exception;
 use PDOException;
 use App\Models\Criteria;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CriteriaRequest;
 use App\Http\Resources\CriteriaResource;
@@ -20,7 +19,7 @@ class CriteriaContoller extends Controller
 
     public function index()
     {
-        return $this->return_success(CriteriaResource::collection(Criteria::all()));
+        return $this->return_success(CriteriaResource::collection(Criteria::latest()->get()));
     }
 
 
@@ -57,7 +56,7 @@ class CriteriaContoller extends Controller
         try{
             $criteria->description = $request->description;
             $criteria->save();
-            return $this->return_success($criteria);
+            return $this->return_success(CriteriaResource::make($criteria->load('questions')));
         }catch(PDOException $e){
             return $this->return_error($e);
         }catch(Exception $e){
