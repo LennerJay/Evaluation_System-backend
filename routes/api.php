@@ -3,9 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\v1\ClassController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\v1\UserController;
+use App\Http\Controllers\Api\v1\ClassController;
 use App\Http\Controllers\Api\V1\RatingContoller;
 use App\Http\Controllers\Api\v1\EntityController;
 use App\Http\Controllers\Api\V1\CriteriaContoller;
@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\V1\EvaluateeController;
 use App\Http\Controllers\Api\v1\DepartmentController;
 use App\Http\Controllers\Api\V1\QuestionaireContoller;
 use App\Http\Controllers\Api\V1\SectionYearController;
+use App\Http\Controllers\Api\v1\AnnouncementController;
 
 Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
 
@@ -53,6 +54,11 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
     Route::apiResource('subjects',SubjectController::class);
     Route::apiResource('section-year',SectionYearController::class);
     Route::apiResource('criterias',CriteriaContoller::class);
+
+
+    Route::get('announcements/latest',[AnnouncementController::class,'fetchLatestAnnouncement'])->middleware('isAdminStaff');
+    Route::apiResource('announcements',AnnouncementController::class)->middleware('isAdminStaff')->except(['show']);
+    Route::post('announcements/{announcement}/update-status',[AnnouncementController::class,'updateStatus'])->middleware('isAdminStaff');
 
 
     Route::post('/ratings',[RatingContoller::class,'store']);

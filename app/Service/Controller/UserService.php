@@ -23,7 +23,7 @@ class UserService{
                     $q->where('evaluatees_users.is_done', true);
                 }
             ])
-            ->latest()->get();
+            ->latest('updated_at')->get();
       return UserResource::collection($users);
     }
 
@@ -46,14 +46,28 @@ class UserService{
 
         $syd->users()->syncWithoutDetaching($request['ids']);
 
-        $result = SectionYearDepartment::with([
-            'department',
-            'users',
-            'sectionYear'
-        ])->find($syd->id);
+        // $result = SectionYearDepartment::with([
+        //     'department',
+        //     'users',
+        //     'sectionYear'
+        // ])->find($syd->id);
+            $users = [];
+        foreach($request['ids'] as $id){
+            $u =  User::with([
+                'role',
+                'sectionYearDepartments' => fn($q) => $q->with(['department','sectionYear'])
+                ])
+                ->withCount([
+                    'evaluatees as evaluatees_count' => function ($q) {
+                        $q->where('evaluatees_users.is_done', true);
+                    }
+                ])
+                ->find( $id);
 
-        return $result;
-        return $request['s_y_id'];
+               array_push($users,UserResource::make($u));
+        }
+
+        return  $users;
     }
 
     public function updateIdNumber($user,$request)

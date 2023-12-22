@@ -28,7 +28,6 @@ class UserInfoRequest extends FormRequest
             'mobile_number'=>'required|integer',
             'course'=>'required',
             'email'=>'required|email',
-            'regular'=>'required|integer',
         ];
     }
 }

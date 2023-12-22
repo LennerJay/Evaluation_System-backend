@@ -60,7 +60,6 @@ class RatingService {
         return $res;
     }
 
-
     public function fetchRatingInfo($request)
     {
         $res = Rating::with([

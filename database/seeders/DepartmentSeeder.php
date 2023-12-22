@@ -18,7 +18,7 @@ class DepartmentSeeder extends Seeder
     public function run(): void
     {
 
-        $deparmentDatas = ['bsit','bshrm','beed','bsed'];
+        $deparmentDatas = ['bsit','bshm','beed','bsed'];
             foreach($deparmentDatas as $deparmentData){
                 Department::create(['name'=> $deparmentData]);
             }

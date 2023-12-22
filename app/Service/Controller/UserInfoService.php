@@ -58,7 +58,7 @@ class UserInfoService{
     public function updateUserInfo($request)
     {
         $user = UserInfo::firstOrCreate([
-            'user_id' => $request['id_number']
+            'user_id' => auth()->user()->id_number
         ]);
 
         $user->first_name= $request['first_name'];
@@ -67,7 +67,6 @@ class UserInfoService{
         $user->mobile_number= $request['mobile_number'];
         $user->course= $request['course'];
         $user->email= $request['email'];
-        $user->regular= $request['regular'];
         $user->save();
         return $user;
 
