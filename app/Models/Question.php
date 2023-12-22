@@ -106,8 +106,6 @@ class Question extends Model
             return 'VS';
         } elseif ($mean >= 4.21 && $mean <= 5) {
             return 'O';
-        } else {
-            return 'FUCK';
         }
 
 

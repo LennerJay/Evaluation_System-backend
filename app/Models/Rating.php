@@ -61,5 +61,11 @@ class Rating extends Model
     {
         $query->where('evaluatee_id',$instructor_id)
         ->where('rating',$rating);
+
+        // $query->join('ratings', function ($join) use ($instructor_id, $rating) {
+        //     $join->on('ratings.question_id', '=', 'questions.id')
+        //          ->where('ratings.evaluatee_id', $instructor_id)
+        //          ->where('ratings.rating', $rating);
+        // });
     }
 }

@@ -35,6 +35,7 @@ class EvaluateeService{
                                     ]);
                                 }
                                 ])
+                                ->withCount('users')
                                 ->latest()->get();
         return  EvaluateeResource::collection($evaluatees);
     }

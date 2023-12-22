@@ -1,11 +1,13 @@
 <?php
 namespace App\Service\Controller;
 
+use App\Http\Resources\RatingResource;
 use App\Http\Resources\RatingsSummaryQuestionaire;
 use App\Models\Rating;
 use App\Models\Evaluatee;
 use App\Http\Resources\RatingsSummaryResource;
 use App\Models\EvaluateeUser;
+use App\Models\Questionaire;
 use stdClass;
 
 class RatingService {
@@ -47,6 +49,81 @@ class RatingService {
         $result->ratingSummary = $ratingsSummary;
         return $result;
 
+    }
+
+    public function getOutcomeRatingsSummary($request)
+    {
+        // $id = $request->evaluatee_id;
+        // $res = Questionaire::with([
+        //     'criterias'=> function($q) use($id){
+        //         $q->with([
+        //             'questions'=> function($q)use($id){
+        //                 $q->withCount([
+        //                     'ratings as NI'=>function($q)use($id){
+        //                         $q->where('evaluatee_id',$id)->where('rating',1);
+        //                     },
+        //                     'ratings as F'=>function($q)use($id){
+        //                         $q->where('evaluatee_id',$id)->where('rating',2);
+        //                     },
+        //                     'ratings as S'=>function($q)use($id){
+        //                         $q->where('evaluatee_id',$id)->where('rating',3);
+        //                     },
+        //                     'ratings as VS'=>function($q)use($id){
+        //                         $q->where('evaluatee_id',$id)->where('rating',4);
+        //                     },
+        //                     'ratings as O'=>function($q)use($id){
+        //                         $q->where('evaluatee_id',$id)->where('rating',5);
+        //                     },
+        //                 ]);
+        //             }
+        //         ]);
+        //     }
+
+        // ])
+        // ->where('entity_id',$request->entity_id)
+        // ->where('status',1)
+        // ->first();
+
+
+        $res = Questionaire::evaluationFormFor($request->evaluatee_id)
+                            ->where('entity_id',$request->entity_id)
+                            ->where('status',1)
+                            ->first();
+
+
+        // $res = Evaluatee::withCount([
+        //     'ratings as Ni'=>function($q){
+        //         $q->where('rating',1);
+        //     }
+        // ])->find($request->evaluatee_id);
+
+        return $res;
+    }
+
+
+    public function fetchRatingInfo($request)
+    {
+        $res = Rating::with([
+                        'user'=>function($q){
+                            $q->with([
+                                'userInfo',
+                                'sectionYearDepartments'=>function($q){
+                                    $q->with([
+                                        'department',
+                                        'sectionYear'
+                                    ]);
+                                }
+                            ]);
+                        },
+                        'question'
+                    ])
+                    ->where('evaluatee_id', $request->evaluatee_id)
+                    ->where('question_id', $request->question_id)
+                    ->where('rating', $request->rating)
+                    ->get();
+
+        return RatingResource::collection($res);
+        // return $res;
     }
 
 

@@ -30,7 +30,6 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
     Route::post('/questionaires/{questionaire}/remove-criterias',[QuestionaireContoller::class,'removeCriteria']);
 
 
-
     Route::post('questions/by-criteria',[QuestionContoller::class,'getQuestionByCriteria']);
     Route::apiResource('questions',QuestionContoller::class)->only('store','update','destroy');
 
@@ -54,10 +53,10 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
     Route::apiResource('criterias',CriteriaContoller::class);
 
 
-
     Route::post('/ratings',[RatingContoller::class,'store']);
+    Route::post('ratings/outcomes' ,[RatingContoller::class,'outcomeRatings']);
     Route::post('/ratings/summary',[RatingContoller::class,'getRatingsSummary']);
-
+    Route::post('/ratings/rating-info',[RatingContoller::class,'getRatingInfo']);
 
     Route::apiResource('users',UserController::class)->except(['show']);
     // Route::get('users/user-infos',[UserController::class,'getUserInfos']);
@@ -73,8 +72,6 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
         Route::delete('/user-infos/{userInfo}','destroy');
 
     });
-
-
 
 
     Route::get('/dashboard/admin',[DashboardController::class,'admin']);

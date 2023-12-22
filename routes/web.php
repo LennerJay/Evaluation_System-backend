@@ -25,7 +25,7 @@ use App\Http\Controllers\Api\V1\QuestionContoller;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-Route::get('/test',[TestController::class,'testModel']);
+Route::get('/test',[TestController::class,'testRating']);
 // Route::get('/questionaires',[QuestionaireController::class,'index']);
 // Route::resource('questionaires.questions',QuestionContoller::class)->only(['index']);
 // // // Route::get('/instructors/{$id}',[InstructorController::class,'index'])->name('instructors');

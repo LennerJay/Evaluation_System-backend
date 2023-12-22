@@ -233,4 +233,41 @@ class TestController extends Controller
                 // $sub = Subject::with('evaluatees')->find(1);
                 //         return response()->json($sub);
     }
+
+    public function testRating(){
+        $usersCollection = collect();
+        $evaluatees = Evaluatee::with([
+            'SectionYearDepartments' => function($q){
+                $q->with('users');
+            },
+        ])->where('entity_id',1)->get();
+            foreach($evaluatees as $evaluatee){
+                foreach($evaluatee->SectionYearDepartments as $syd){
+                    $usersCollection = $usersCollection->concat($syd->users);
+                }
+                $randomizedUsers = $usersCollection->shuffle();
+                $random100Users = $randomizedUsers->take(100);
+                $randomRAte = mt_rand(1,5);
+
+            }
+            $questions = [];
+            $questionnaire = Questionaire::with([
+                                            'criterias'=>function($q){
+                                                $q->with('questions');
+                                            }
+                                        ])
+                                        ->where('status',1)
+                                        ->where('entity_id',1)
+                                        ->latest('updated_at')
+                                        ->first();
+                                        if ($questionnaire) {
+                                            foreach ($questionnaire->criterias as $criteria) {
+                                                foreach ($criteria->questions as $question) {
+                                                    $questions[] = $question;
+                                                }
+                                            }
+                                        }
+
+        return  dd(    $questions ) ;
+    }
 }

@@ -35,4 +35,28 @@ class RatingContoller extends Controller
             return $this->return_error($e->getMessage());
         }
     }
+
+
+    public function outcomeRatings (Request $request){
+        try{
+            $result = (new RatingService)->getOutcomeRatingsSummary($request);
+            return $this->return_success($result);
+        }catch(PDOException $e){
+            return $this->return_error($e->getMessage());
+        }catch(Exception $e){
+            return $this->return_error($e->getMessage());
+        }
+    }
+
+    public function getRatingInfo(Request $request)
+    {
+        try{
+            $result = (new RatingService)->fetchRatingInfo($request);
+            return $this->return_success($result);
+        }catch(PDOException $e){
+            return $this->return_error($e->getMessage());
+        }catch(Exception $e){
+            return $this->return_error($e->getMessage());
+        }
+    }
 }
