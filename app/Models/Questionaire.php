@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Entity;
 use App\Models\Criteria;
+use Faker\Core\Number;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -81,7 +82,7 @@ class Questionaire extends Model
                             'ratings' => function($query)use($id){
                                 $query->where('evaluatee_id',$id);
                             }
-                            ],'rating')
+                            ],'rating',fn ($avg) => round((float)$avg, 2))
                         ;
                     }
                 ]);

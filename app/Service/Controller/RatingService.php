@@ -53,50 +53,10 @@ class RatingService {
 
     public function getOutcomeRatingsSummary($request)
     {
-        // $id = $request->evaluatee_id;
-        // $res = Questionaire::with([
-        //     'criterias'=> function($q) use($id){
-        //         $q->with([
-        //             'questions'=> function($q)use($id){
-        //                 $q->withCount([
-        //                     'ratings as NI'=>function($q)use($id){
-        //                         $q->where('evaluatee_id',$id)->where('rating',1);
-        //                     },
-        //                     'ratings as F'=>function($q)use($id){
-        //                         $q->where('evaluatee_id',$id)->where('rating',2);
-        //                     },
-        //                     'ratings as S'=>function($q)use($id){
-        //                         $q->where('evaluatee_id',$id)->where('rating',3);
-        //                     },
-        //                     'ratings as VS'=>function($q)use($id){
-        //                         $q->where('evaluatee_id',$id)->where('rating',4);
-        //                     },
-        //                     'ratings as O'=>function($q)use($id){
-        //                         $q->where('evaluatee_id',$id)->where('rating',5);
-        //                     },
-        //                 ]);
-        //             }
-        //         ]);
-        //     }
-
-        // ])
-        // ->where('entity_id',$request->entity_id)
-        // ->where('status',1)
-        // ->first();
-
-
         $res = Questionaire::evaluationFormFor($request->evaluatee_id)
                             ->where('entity_id',$request->entity_id)
                             ->where('status',1)
                             ->first();
-
-
-        // $res = Evaluatee::withCount([
-        //     'ratings as Ni'=>function($q){
-        //         $q->where('rating',1);
-        //     }
-        // ])->find($request->evaluatee_id);
-
         return $res;
     }
 
