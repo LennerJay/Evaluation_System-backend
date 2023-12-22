@@ -28,6 +28,8 @@ Route::group(['prefix'=>'v1','middleware'=>'auth:sanctum'],function(){
     Route::patch('/questionaires/{questionaire}/update-status',[QuestionaireContoller::class,'updateStatus']);
     Route::get('/questionaires/{questionaire}/with-criterias',[QuestionaireContoller::class,'withCriterias']);
     Route::post('/questionaires/{questionaire}/remove-criterias',[QuestionaireContoller::class,'removeCriteria']);
+    Route::post('/questionaires/{questionaire}/attach-criterias',[QuestionaireContoller::class,'attachCriterias']);
+
 
 
     Route::post('questions/by-criteria',[QuestionContoller::class,'getQuestionByCriteria']);

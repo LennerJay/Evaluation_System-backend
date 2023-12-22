@@ -169,4 +169,18 @@ class QuestionaireContoller extends Controller
         }
     }
 
+    public function attachCriterias (Questionaire $questionaire,Request $request){
+        try{
+
+            $questionaire->criterias()->syncWithoutDetaching($request->criteria_ids);
+            return $this->return_success($questionaire->load(['criterias']));
+            // return $this->return_success($request->criteria_ids);
+        }catch(PDOException $e){
+            return $this->return_error($e->getMessage());
+        }catch(Exception $e){
+            return $this->return_error($e->getMessage());
+        }
+
+    }
+
 }
